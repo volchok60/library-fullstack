@@ -1,7 +1,30 @@
 from enum import Enum
 from typing import Annotated
 from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import logging
+
+app = FastAPI()
+
+origins = [
+    "localhost",
+] 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+# Get the univorn logger for the same CLI look
+logger = logging.getLogger("uvicorn")
+
+# logger.info("GET request received at root endpoint")
+# logger.error("This is a test error.")
 
 # Python enum
 class ModelName(str, Enum):
@@ -9,13 +32,12 @@ class ModelName(str, Enum):
     resnet = "resnet"
     lenet = "lenet"
 
+# Define what you will receiving in request
 class Item(BaseModel):
     name: str
     description: str | None = None # optional
     price: float
     tax: float | None = None # optional
-
-app = FastAPI()
 
 @app.get("/models/{model_name}")
 async def get_model(model_name: ModelName):

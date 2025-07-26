@@ -8,6 +8,7 @@ Biult with FastAPI.
 
 ```sh
 uv init server
+cd server
 ```
 
 2. Add packages
