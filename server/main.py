@@ -8,7 +8,7 @@ import logging
 app = FastAPI()
 
 origins = [
-    "localhost",
+    "http://localhost:3000",
 ] 
 
 app.add_middleware(

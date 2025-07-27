@@ -38,10 +38,10 @@ export default function BookCreate() {
     const formData = new FormData(form)
 
     const payload = {
-      title: formData.get('title'),
+      title: formData.get('title')?.toString() || '',
       authorId: parseInt(formData.get('author_id') as string),
       genreId: parseInt(formData.get('genre_id') as string),
-      summary: formData.get('summary')
+      summary: formData.get('summary')?.toString() || ''
     }
 
     try {

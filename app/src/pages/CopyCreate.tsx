@@ -31,10 +31,10 @@ export default function CopyCreate() {
 
     const payload = {
       bookId: parseInt(formData.get('book_id') as string),
-      imprint: formData.get('imprint'),
+      imprint: formData.get('imprint')?.toString() || '',
       dueBack: dueDate,
       status: parseInt(formData.get('status') as string),
-      isbn: formData.get('isbn')
+      isbn: formData.get('isbn')?.toString() || ''
     }
 
     try {

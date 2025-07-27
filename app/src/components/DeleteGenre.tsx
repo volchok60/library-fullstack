@@ -1,18 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteGenre } from '../lib/api'
 
-interface DeleteGenreProps {
-  id: number
-}
-
-export default function DeleteGenre({ id }: DeleteGenreProps) {
+export default function DeleteGenre(id: number) {
   const navigate = useNavigate()
 
   async function deleteDialog() {
     const conf = confirm("Delete Genre?")
     if (conf) {
-      const genre = await deleteGenre(id)
-      console.log('deleted genre with ID: ' + genre.id)
+      const genreId = await deleteGenre(id)
+      console.log('deleted genre with ID: ' + genreId)
       navigate('/genres')
     }
   }

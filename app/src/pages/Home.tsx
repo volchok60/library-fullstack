@@ -15,6 +15,7 @@ export default function Home() {
   useEffect(() => {
     async function fetchCounts() {
       try {
+         
         const [books, copies, availableCopies, authors, genres] = await Promise.all([
           booksCount(),
           copiesCount(),

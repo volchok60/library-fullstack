@@ -1,18 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteAuthor } from '../lib/api'
 
-interface DeleteAuthorProps {
-  id: number
-}
-
-export default function DeleteAuthor({ id }: DeleteAuthorProps) {
+export default function DeleteAuthor(id: number) {
   const navigate = useNavigate()
 
   async function deleteDialog() {
     const conf = confirm("Delete Author?")
     if (conf) {
-      const author = await deleteAuthor(id)
-      console.log('deleted author with ID: ' + author.id)
+      const authorId = await deleteAuthor(id)
+      console.log('deleted author with ID: ' + authorId)
       navigate('/authors')
     }
   }

@@ -1,18 +1,14 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteBookCopy } from '../lib/api'
 
-interface DeleteBookCopyProps {
-  id: number
-}
-
-export default function DeleteBookCopy({ id }: DeleteBookCopyProps) {
+export default function DeleteBookCopy(id: number) {
   const navigate = useNavigate()
 
   async function deleteDialog() {
     const conf = confirm("Delete Book Copy?")
     if (conf) {
-      const bookCopy = await deleteBookCopy(id)
-      console.log('deleted bookCopy with ID: ' + bookCopy.id)
+      const bookCopyId = await deleteBookCopy(id)
+      console.log('deleted bookCopy with ID: ' + bookCopyId)
       navigate('/copies')
     }
   }
