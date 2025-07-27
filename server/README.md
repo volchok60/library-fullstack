@@ -14,8 +14,9 @@ cd server
 2. Add packages
 
 ```sh
-uv add ruff
 uv add fastapi --extra standard
+uv add psycopg --extra binary
+uv add --dev ruff
 ```
 
 3. Start local development
