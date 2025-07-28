@@ -29,8 +29,8 @@ jobs:
       with:
         filters: |
           changed:
-            - backend/**
-            - frontend/**
+            - server/**
+            - app/**
             - .env
             - docker-compose*.yml
             - .github/workflows/playwright.yml
@@ -65,12 +65,12 @@ jobs:
         version: "0.4.15"
         enable-cache: true
     - run: uv sync
-      working-directory: backend
+      working-directory: server
     - run: npm ci
-      working-directory: frontend
+      working-directory: app
     - run: uv run bash scripts/generate-client.sh
       env:
-        VIRTUAL_ENV: backend/.venv
+        VIRTUAL_ENV: server/.venv
     - run: docker compose build
     - run: docker compose down -v --remove-orphans
     - name: Run Playwright tests
@@ -81,7 +81,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: blob-report-${{ matrix.shardIndex }}
-        path: frontend/blob-report
+        path: app/blob-report
         include-hidden-files: true
         retention-days: 1
 
@@ -99,21 +99,21 @@ jobs:
         node-version: 20
     - name: Install dependencies
       run: npm ci
-      working-directory: frontend
+      working-directory: app
     - name: Download blob reports from GitHub Actions Artifacts
       uses: actions/download-artifact@v4
       with:
-        path: frontend/all-blob-reports
+        path: app/all-blob-reports
         pattern: blob-report-*
         merge-multiple: true
     - name: Merge into HTML Report
       run: npx playwright merge-reports --reporter html ./all-blob-reports
-      working-directory: frontend
+      working-directory: app
     - name: Upload HTML report
       uses: actions/upload-artifact@v4
       with:
         name: html-report--attempt-${{ github.run_attempt }}
-        path: frontend/playwright-report
+        path: app/playwright-report
         retention-days: 30
         include-hidden-files: true
 
