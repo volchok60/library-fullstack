@@ -48,7 +48,7 @@ Make sure you create a "revision" of your models and that you "upgrade" your dat
 * After changing a model (for example, adding a column), create a revision, e.g.:
 
 ```console
-$ alembic revision --autogenerate -m "Added User model"
+$ alembic revision --autogenerate -m "Added column last_name to User model"
 ```
 
 * Commit to the git repository the files generated in the alembic directory.
