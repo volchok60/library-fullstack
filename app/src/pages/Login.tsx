@@ -1,5 +1,5 @@
 import { useState, FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { login } from '../lib/api'
 
 export default function Login() {
@@ -21,32 +21,40 @@ export default function Login() {
   }
 
   return (
-    <div>
-      <h1 className='text-center m-2'>Login Form</h1>
+    <div className='mt-8'>
+      <h1 className='mb-8 text-center m-2 text-teal-600 font-bold text-4xl'>Admin Login</h1>
       <form onSubmit={handleLogin}>
-        <div className="grid grid-cols-2 gap-3">
-          <label className='sm:text-end'>Username:</label>
+        <div className='flex flex-col items-center'>
           <input 
             type="text" 
-            required 
-            value={username} 
-            onChange={e => setUsername(e.target.value)} 
+            required
+            placeholder='Email' 
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            className='mb-4 rounded-md border border-gray-300 p-2 w-64' 
           />
-          
-          <label className='sm:text-end'>Password:</label>
           <input 
             type="password" 
-            required 
+            required
+            placeholder='Password' 
             value={password} 
             onChange={e => setPassword(e.target.value)}
+            className='mb-4 rounded-md border border-gray-300 p-2 w-64'
           />
-        </div>
-        <div className='text-center'>
+          <Link to="/recover-password" className='mb-4'>
+            <span className='text-teal-600 font-bold'>Forgot Password?</span>        
+          </Link>
           <input 
             type="submit" 
-            value="Login" 
-            className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 m-2 px-2' 
+            value="Log In" 
+            className='mb-4 rounded-md bg-teal-600 text-white p-2 w-64 cursor-pointer font-bold'
           />
+          <div>
+            <span className='text-gray-600'>Don't have an account? </span>
+            <Link to="/signup" className='mb-4'>
+              <span className='text-teal-600 font-bold'>Sign Up</span>
+            </Link>
+          </div>
         </div>
       </form>
     </div>
