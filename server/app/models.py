@@ -150,36 +150,41 @@ class BooksPublic(SQLModel):
     count: int
 
 # Book copy model definitions
-#class BookCopyBase(SQLModel):
-#    book_id: uuid.UUID = Field(foreign_key="book.id", nullable=False, ondelete="CASCADE")
-#    book: Book | None = Relationship(back_populates="copies")
-#    is_available: bool = True
-#    copy_number: int = Field(default=1)
+class BookCopyBase(SQLModel):
+    imprint: str | None = Field(default=None, max_length=255)
+    due_back: datetime | None = Field(default=None)
+    status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
+    isbn: str | None = Field(default=None, max_length=13)
 
-#class BookCopyCreate(BookCopyBase):
-#    created_at: datetime = Field(default_factory=datetime.now)
-#    updated_at: datetime = Field(default_factory=datetime.now)
+class BookCopyCreate(BookCopyBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
-#class BookCopyUpdate(BookCopyBase):
-#    is_available: bool | None = Field(default=None)
-#    copy_number: int | None = Field(default=None)
-#    updated_at: datetime = Field(default_factory=datetime.now)
+class BookCopyUpdate(BookCopyBase):
+    imprint: str | None = Field(default=None, max_length=255)
+    due_back: datetime | None = Field(default=None)
+    status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
+    isbn: str | None = Field(default=None, max_length=13)
+    updated_at: datetime = Field(default_factory=datetime.now)
 
-#class BookCopy(BookCopyBase, table=True):
-#    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-#    created_at: datetime = Field(default_factory=datetime.now)
-#    updated_at: datetime = Field(default_factory=datetime.now)
+class BookCopy(BookCopyBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    book_id: uuid.UUID = Field(foreign_key="book.id", nullable=False, ondelete="CASCADE")
+    book: Book | None = Relationship(back_populates="copies")
 
-#class BookCopyPublic(BookCopyBase):
-#    id: uuid.UUID
-#    book_id: uuid.UUID
-#    is_available: bool
-#    copy_number: int
+class BookCopyPublic(BookCopyBase):
+    id: uuid.UUID
+    book_id: uuid.UUID
+    imprint: str | None = Field(default=None, max_length=255)
+    due_back: datetime | None = Field(default=None)
+    status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
+    isbn: str | None = Field(default=None, max_length=13)
 
-#class BookCopiesPublic(SQLModel):
-#    data: list[BookCopyPublic]
-#    count: int
-
+class BookCopiesPublic(SQLModel):
+    data: list[BookCopyPublic]
+    count: int
 
 # Generic message
 class Message(SQLModel):
