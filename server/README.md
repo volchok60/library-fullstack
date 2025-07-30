@@ -71,10 +71,10 @@ Once you have the MJML extension installed, you can create a new email template 
 
 ## OpenAPI
 
-To generate openapi.json:
+To generate openapi.json for frontend:
 
 ```sh
-uv run python -c "import app.main; import json; print(json.dumps(app.main.app.openapi()))" > ../openapi.json
+uv run python -c "import app.main; import json; print(json.dumps(app.main.app.openapi()))" > ../app/openapi.json
 ```
 
 ### Development URLs

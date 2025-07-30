@@ -18,6 +18,8 @@ import CopyDetails from './pages/CopyDetails'
 import CopyCreate from './pages/CopyCreate'
 import CopyEdit from './pages/CopyEdit'
 import Login from './pages/Login'
+import SignUp from './pages/signup'
+import RecoverPassword from './pages/recover-password'
 
 function App() {
   return (
@@ -41,6 +43,8 @@ function App() {
         <Route path="/copies/create" element={<CopyCreate />} />
         <Route path="/copies/:id/edit" element={<CopyEdit />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/recover-password" element={<RecoverPassword />} />
       </Routes>
     </Layout>
   )

@@ -3,8 +3,7 @@ import { Container, Heading, Input, Text } from "@chakra-ui/react"
 // import { createFileRoute, redirect } from "@tanstack/react-router"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { FiMail } from "react-icons/fi"
-
-import { type ApiError, LoginService } from "../client"
+import { type ApiError, LoginService } from "../core/sdk.gen"
 import { Button } from "../components/ui/button"
 import { Field } from "../components/ui/field"
 import { InputGroup } from "../components/ui/input-group"
@@ -93,3 +92,5 @@ function RecoverPassword() {
     </Container>
   )
 }
+
+export default RecoverPassword

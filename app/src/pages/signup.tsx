@@ -14,7 +14,7 @@ import { InputGroup } from "../components/ui/input-group"
 import { PasswordInput } from "../components/ui/password-input"
 import useAuth, { isLoggedIn } from "../hooks/useAuth"
 import { confirmPasswordRules, emailPattern, passwordRules } from "../utils"
-import Logo from "library-bookshelf.svg"
+import Logo from "/library-bookshelf.svg"
 
 // export const Route = createFileRoute("/signup")({
 //   component: SignUp,
