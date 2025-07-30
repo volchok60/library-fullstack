@@ -115,16 +115,41 @@ class GenresPublic(SQLModel):
     data: list[GenrePublic]
     count: int
 
-#class AuthorBase(SQLModel):
-#    first_name: str = Field(max_length=255)
-#    family_name: str = Field(max_length=255)
-#    birth_date: str = Field(max_length=10)  # YYYY-MM-DD format
-#    death_date: str | None = Field(default=None, max_length=10)  # YYYY-MM-DD format
-#    life_span: str | None = Field(default=None, max_length=255)
+class AuthorBase(SQLModel):
+    first_name: str = Field(max_length=255)
+    family_name: str = Field(max_length=255)
+    birth_date: datetime
+    death_date: datetime | None = Field(default=None)
+    life_span: str | None = Field(default=None, max_length=255)
 
-#class AuthorCreate(AuthorBase):
-#    created_at: str = Field(max_length=255)  # ISO 8601 format
-#   updated_at: str = Field(max_length=255)  # ISO 8601 format
+class AuthorCreate(AuthorBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class AuthorUpdate(AuthorBase):
+    first_name: str | None = Field(default=None, max_length=255)
+    family_name: str | None = Field(default=None, max_length=255)
+    birth_date: datetime | None = Field(default=None)
+    death_date: datetime | None = Field(default=None)
+    life_span: str | None = Field(default=None, max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class Author(AuthorBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class AuthorPublic(AuthorBase):
+    id: uuid.UUID
+    first_name: str
+    family_name: str
+    birth_date: datetime
+    death_date: datetime | None = Field(default=None)
+    life_span: str | None = Field(default=None, max_length=255)
+
+class AuthorsPublic(SQLModel):
+    data: list[AuthorPublic]
+    count: int
 
 # Generic message
 class Message(SQLModel):
