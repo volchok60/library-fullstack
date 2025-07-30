@@ -1,5 +1,5 @@
 import uuid
-
+from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -91,6 +91,40 @@ class UsersPublic(SQLModel):
 #    data: list[ItemPublic]
 #    count: int
 
+class GenreBase(SQLModel):
+    name: str = Field(unique=True, index=True, max_length=255)
+
+class GenreCreate(GenreBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class GenreUpdate(GenreBase):
+    name: str = Field(max_length=255)
+    updated_at: datetime = Field(default_factory=datetime.now)  
+
+class Genre(GenreBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class GenrePublic(GenreBase):
+    id: uuid.UUID
+    name: str
+
+class GenresPublic(SQLModel):   
+    data: list[GenrePublic]
+    count: int
+
+#class AuthorBase(SQLModel):
+#    first_name: str = Field(max_length=255)
+#    family_name: str = Field(max_length=255)
+#    birth_date: str = Field(max_length=10)  # YYYY-MM-DD format
+#    death_date: str | None = Field(default=None, max_length=10)  # YYYY-MM-DD format
+#    life_span: str | None = Field(default=None, max_length=255)
+
+#class AuthorCreate(AuthorBase):
+#    created_at: str = Field(max_length=255)  # ISO 8601 format
+#   updated_at: str = Field(max_length=255)  # ISO 8601 format
 
 # Generic message
 class Message(SQLModel):

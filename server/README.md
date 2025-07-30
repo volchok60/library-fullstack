@@ -76,3 +76,21 @@ To generate openapi.json:
 ```sh
 uv run python -c "import app.main; import json; print(json.dumps(app.main.app.openapi()))" > ../openapi.json
 ```
+
+### Development URLs
+
+Development URLs, for local development.
+
+Frontend: http://localhost:3000
+
+Backend: http://localhost:8000
+
+Automatic Interactive Docs (Swagger UI): http://localhost:8000/docs
+
+Automatic Alternative Docs (ReDoc): http://localhost:8000/redoc
+
+Adminer: http://localhost:8080
+
+Traefik UI: http://localhost:8090
+
+MailCatcher: http://localhost:1080
