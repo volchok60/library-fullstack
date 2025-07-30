@@ -55,42 +55,6 @@ class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
 
-
-# Shared properties
-#class ItemBase(SQLModel):
-#    title: str = Field(min_length=1, max_length=255)
-#    description: str | None = Field(default=None, max_length=255)
-
-
-# Properties to receive on item creation
-#class ItemCreate(ItemBase):
-#    pass
-
-
-# Properties to receive on item update
-#class ItemUpdate(ItemBase):
-#    title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
-
-
-# Database model, database table inferred from class name
-#class Item(ItemBase, table=True):
-#    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-#    owner_id: uuid.UUID = Field(
-#        foreign_key="user.id", nullable=False, ondelete="CASCADE"
-#    )
-#    owner: User | None = Relationship(back_populates="items")
-
-
-# Properties to return via API, id is always required
-#class ItemPublic(ItemBase):
-#    id: uuid.UUID
-#    owner_id: uuid.UUID
-
-
-#class ItemsPublic(SQLModel):
-#    data: list[ItemPublic]
-#    count: int
-
 class GenreBase(SQLModel):
     name: str = Field(unique=True, index=True, max_length=255)
 
@@ -149,6 +113,43 @@ class AuthorPublic(AuthorBase):
 
 class AuthorsPublic(SQLModel):
     data: list[AuthorPublic]
+    count: int
+
+class BookBase(SQLModel):
+    title: str = Field(max_length=255)
+    summary: str | None = Field(default=None, max_length=1000)
+
+class BookCreate(BookBase):
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class BookUpdate(BookBase):
+    title: str | None = Field(default=None, max_length=255)
+    summary: str | None = Field(default=None, max_length=1000)
+    updated_at: datetime = Field(default_factory=datetime.now)
+
+class Book(BookBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    created_at: datetime = Field(default_factory=datetime.now)
+    updated_at: datetime = Field(default_factory=datetime.now)
+    author_id: uuid.UUID = Field(
+        foreign_key="author.id", nullable=False, ondelete="CASCADE"
+    )
+    author: Author | None = Relationship(back_populates="books") 
+    genre_id: uuid.UUID = Field(
+        foreign_key="genre.id", nullable=False, ondelete="CASCADE"
+    )
+    genre: Genre | None = Relationship(back_populates="books")   
+
+class BookPublic(BookBase):
+    id: uuid.UUID
+    title: str
+    summary: str | None = Field(default=None, max_length=1000)
+    author_id: uuid.UUID
+    genre_id: uuid.UUID
+
+class BooksPublic(SQLModel):
+    data: list[BookPublic]
     count: int
 
 # Generic message
