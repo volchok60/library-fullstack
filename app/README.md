@@ -2,7 +2,13 @@
 
 React SPA app with Supabase integration 
 
-## Getting Started
+## Scaffolding
+
+```sh
+npm create vite@latest app --template react
+```
+
+## Development
 
 First, run the development server:
 
