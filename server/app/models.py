@@ -3,6 +3,7 @@ from datetime import datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
+# User model definitions
 
 # Shared properties
 class UserBase(SQLModel):
@@ -11,50 +12,42 @@ class UserBase(SQLModel):
     is_superuser: bool = False
     full_name: str | None = Field(default=None, max_length=255)
 
-
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=40)
-
 
 class UserRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     full_name: str | None = Field(default=None, max_length=255)
 
-
 # Properties to receive via API on update, all are optional
 class UserUpdate(UserBase):
     email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore
     password: str | None = Field(default=None, min_length=8, max_length=40)
 
-
 class UserUpdateMe(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
-
 
 class UpdatePassword(SQLModel):
     current_password: str = Field(min_length=8, max_length=40)
     new_password: str = Field(min_length=8, max_length=40)
 
-
 # Database model, database table inferred from class name
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    #items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
-
 
 # Properties to return via API, id is always required
 class UserPublic(UserBase):
     id: uuid.UUID
 
-
 class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
 
+# Genre model definitions
 class GenreBase(SQLModel):
     name: str = Field(unique=True, index=True, max_length=255)
 
@@ -70,6 +63,7 @@ class Genre(GenreBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    books: list["Book"] = Relationship(back_populates="genre", cascade_delete=True)
 
 class GenrePublic(GenreBase):
     id: uuid.UUID
@@ -79,6 +73,7 @@ class GenresPublic(SQLModel):
     data: list[GenrePublic]
     count: int
 
+# Author model definitions
 class AuthorBase(SQLModel):
     first_name: str = Field(max_length=255)
     family_name: str = Field(max_length=255)
@@ -102,6 +97,7 @@ class Author(AuthorBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
+    books: list["Book"] = Relationship(back_populates="author", cascade_delete=True)
 
 class AuthorPublic(AuthorBase):
     id: uuid.UUID
@@ -115,6 +111,7 @@ class AuthorsPublic(SQLModel):
     data: list[AuthorPublic]
     count: int
 
+# Book model definitions
 class BookBase(SQLModel):
     title: str = Field(max_length=255)
     summary: str | None = Field(default=None, max_length=1000)
@@ -139,7 +136,7 @@ class Book(BookBase, table=True):
     genre_id: uuid.UUID = Field(
         foreign_key="genre.id", nullable=False, ondelete="CASCADE"
     )
-    genre: Genre | None = Relationship(back_populates="books")   
+    genre: Genre | None = Relationship(back_populates="books")
 
 class BookPublic(BookBase):
     id: uuid.UUID
@@ -151,6 +148,38 @@ class BookPublic(BookBase):
 class BooksPublic(SQLModel):
     data: list[BookPublic]
     count: int
+
+# Book copy model definitions
+#class BookCopyBase(SQLModel):
+#    book_id: uuid.UUID = Field(foreign_key="book.id", nullable=False, ondelete="CASCADE")
+#    book: Book | None = Relationship(back_populates="copies")
+#    is_available: bool = True
+#    copy_number: int = Field(default=1)
+
+#class BookCopyCreate(BookCopyBase):
+#    created_at: datetime = Field(default_factory=datetime.now)
+#    updated_at: datetime = Field(default_factory=datetime.now)
+
+#class BookCopyUpdate(BookCopyBase):
+#    is_available: bool | None = Field(default=None)
+#    copy_number: int | None = Field(default=None)
+#    updated_at: datetime = Field(default_factory=datetime.now)
+
+#class BookCopy(BookCopyBase, table=True):
+#    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+#    created_at: datetime = Field(default_factory=datetime.now)
+#    updated_at: datetime = Field(default_factory=datetime.now)
+
+#class BookCopyPublic(BookCopyBase):
+#    id: uuid.UUID
+#    book_id: uuid.UUID
+#    is_available: bool
+#    copy_number: int
+
+#class BookCopiesPublic(SQLModel):
+#    data: list[BookCopyPublic]
+#    count: int
+
 
 # Generic message
 class Message(SQLModel):
