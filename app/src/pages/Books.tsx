@@ -9,7 +9,7 @@ export default function Books() {
   useEffect(() => {
     async function fetchBooks() {
       try {
-        const data = await getBooks()
+        const {data, count} = await getBooks()
         setBooks(data)
       } catch (error) {
         console.error('Failed to fetch books:', error)

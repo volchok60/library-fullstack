@@ -11,7 +11,7 @@ export default function Genres() {
   useEffect(() => {
     async function fetchGenres() {
       try {
-        const data = await getGenres()
+        const {data, count} = await getGenres()
         setGenres(data)
       } catch (error) {
         console.error('Failed to fetch genres:', error)
