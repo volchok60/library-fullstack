@@ -140,19 +140,19 @@ export async function getGenre(id: number) {
 }
 
 export async function deleteAuthor(id: number): Promise<number> {
-  const response = await fetch(`/api/v1/authors/${id}`, { method: 'DELETE' });
+  const response = await fetch(`${baseUrl}/api/v1/authors/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('Failed to delete author for id: ' + id);
   return id;
 }
 
 export async function deleteBook(id: number): Promise<number> {
-  const response =  await fetch(`/api/v1/books/${id}`, { method: 'DELETE' });
+  const response =  await fetch(`${baseUrl}/api/v1/books/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('Failed to delete book for id: ' + id);
   return id;
 }
 
 export async function deleteGenre(id: number): Promise<number> {
-  const response = await fetch(`/api/v1/genres/${id}`, { method: 'DELETE' });
+  const response = await fetch(`${baseUrl}/api/v1/genres/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('Failed to delete genre for id: ' + id);
   return id;
 }
@@ -164,7 +164,7 @@ export async function createAuthor(payload: {
   deathDate: Date | null;
   lifeSpan: string;
 }) {
-  const response = await fetch('/api/v1/authors', {
+  const response = await fetch(`${baseUrl}/api/v1/authors`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -185,7 +185,7 @@ export async function createBook(payload: {
   status: number;
   isbn: string;
 }) {
-  const response = await fetch('/apiv1/books', {
+  const response = await fetch(`${baseUrl}/apiv1/books`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -199,7 +199,7 @@ export async function createBook(payload: {
 export async function createGenre(payload: {
   name: string;
 }) {
-  const response = await fetch('/api/v1/genres', {
+  const response = await fetch(`${baseUrl}/api/v1/genres`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -217,7 +217,7 @@ export async function updateAuthor(id: number, payload: {
   deathDate: Date | null;
   lifeSpan: string;
 }) {
-  const response = await fetch(`/api/v1/authors/${id}`, {
+  const response = await fetch(`${baseUrl}/api/v1/authors/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -238,7 +238,7 @@ export async function updateBook(id: number, payload: {
   status: number;
   isbn: string;
 }) {
-  const response = await fetch(`/api/v1/books/${id}`, {
+  const response = await fetch(`${baseUrl}/api/v1/books/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -252,7 +252,7 @@ export async function updateBook(id: number, payload: {
 export async function updateGenre(id: number, payload: {
   name: string;
 }) {
-  const response = await fetch(`/api/v1/genres/${id}`, {
+  const response = await fetch(`${baseUrl}/api/v1/genres/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -264,7 +264,7 @@ export async function updateGenre(id: number, payload: {
 }
 
 export async function login(username: string, password: string) {
-  const response = await fetch('/api/v1/login', {
+  const response = await fetch(`${baseUrl}/api/v1/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, password }),
@@ -278,7 +278,7 @@ export async function login(username: string, password: string) {
 }
 
 export async function logout() {
-  const response = await fetch('/api/v1/logout', {
+  const response = await fetch(`${baseUrl}/api/v1/logout`, {
     method: 'POST',
   });
 
@@ -290,7 +290,7 @@ export async function logout() {
 }
 
 export async function getCurrentUser() {
-  const response = await fetch('/api/v1/current_user');
+  const response = await fetch(`${baseUrl}/api/v1/current_user`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch current user');
@@ -300,7 +300,7 @@ export async function getCurrentUser() {
 }
 
 export async function getUserPermissions() {
-  const response = await fetch('/api/v1/permissions');
+  const response = await fetch(`${baseUrl}/api/v1/permissions`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch user permissions');
@@ -310,7 +310,7 @@ export async function getUserPermissions() {
 }
 
 export async function getUserRoles() {
-  const response = await fetch('/api/v1/roles');
+  const response = await fetch(`${baseUrl}/api/v1/roles`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch user roles');
@@ -320,7 +320,7 @@ export async function getUserRoles() {
 }
 
 export async function getUserProfile() {
-  const response = await fetch('/api/v1/profile');
+  const response = await fetch(`${baseUrl}/api/v1/profile`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch user profile');
@@ -334,7 +334,7 @@ export async function updateUserProfile(payload: {
   lastName: string;
   email: string;
 }) {
-  const response = await fetch('/api/v1/profile', {
+  const response = await fetch(`${baseUrl}/api/v1/profile`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -348,7 +348,7 @@ export async function updateUserProfile(payload: {
 }
 
 export async function changeUserPassword(oldPassword: string, newPassword: string) {
-  const response = await fetch('/api/v1/change_password', {
+  const response = await fetch(`${baseUrl}/api/v1/change_password`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ oldPassword, newPassword }),
@@ -362,7 +362,7 @@ export async function changeUserPassword(oldPassword: string, newPassword: strin
 }
 
 export async function resetUserPassword(email: string) {
-  const response = await fetch('/api/v1/reset_password', {
+  const response = await fetch(`${baseUrl}/api/v1/reset_password`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
@@ -376,7 +376,7 @@ export async function resetUserPassword(email: string) {
 }
 
 export async function verifyUserEmail(token: string) {
-  const response = await fetch(`/api/v1/verify_email?token=${token}`, {
+  const response = await fetch(`${baseUrl}/api/v1/verify_email?token=${token}`, {
     method: 'GET',
   });
 
@@ -388,7 +388,7 @@ export async function verifyUserEmail(token: string) {
 }
 
 export async function requestEmailVerification(email: string) {
-  const response = await fetch('/api/v1/request_email_verification', {
+  const response = await fetch(`${baseUrl}api/v1/request_email_verification`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email }),
@@ -402,7 +402,7 @@ export async function requestEmailVerification(email: string) {
 }
 
 export async function getNotifications() {
-  const response = await fetch('/api/v1/notifications');
+  const response = await fetch(`${baseUrl}/api/v1/notifications`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch notifications');
@@ -412,7 +412,7 @@ export async function getNotifications() {
 }
 
 export async function markNotificationAsRead(id: number) {
-  const response = await fetch(`/api/v1/notifications/${id}/read`, {
+  const response = await fetch(`${baseUrl}/api/v1/notifications/${id}/read`, {
     method: 'POST',
   });
 
@@ -424,7 +424,7 @@ export async function markNotificationAsRead(id: number) {
 }
 
 export async function deleteNotification(id: number) {
-  const response = await fetch(`/api/v1/notifications/${id}`, {
+  const response = await fetch(`${baseUrl}/api/v1/notifications/${id}`, {
     method: 'DELETE',
   });
 
@@ -436,7 +436,7 @@ export async function deleteNotification(id: number) {
 }
 
 export async function getUserActivity() {
-  const response = await fetch('/api/v1/activity');
+  const response = await fetch(`${baseUrl}/api/v1/activity`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch user activity');
@@ -446,7 +446,7 @@ export async function getUserActivity() {
 }
 
 export async function getUserSettings() {
-  const response = await fetch('/api/v1/settings');
+  const response = await fetch(`${baseUrl}/api/v1/settings`);
 
   if (!response.ok) {
     throw new Error('Failed to fetch user settings');

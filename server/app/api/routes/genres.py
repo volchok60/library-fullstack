@@ -35,12 +35,12 @@ async def genres_count(session: SessionDep) -> Response:
 )
 def read_genres(session: SessionDep, skip: int = 0, limit: int = 100) -> GenresPublic:
     """
-    Retrieve books.
+    Retrieve genres.
     """
 
     count_statement = select(func.count()).select_from(Genre)
     count = session.exec(count_statement).one()
-    # Fetch all books
+    
     statement = select(Genre).offset(skip).limit(limit)
     genres = session.exec(statement).all()
 
@@ -49,7 +49,7 @@ def read_genres(session: SessionDep, skip: int = 0, limit: int = 100) -> GenresP
 @router.post(
     "/", response_model=GenrePublic
 )
-def create_genre(*, session: SessionDep, genre_in: GenreCreate) -> Any:
+def create_genre(*, session: SessionDep, genre_in: GenreCreate) -> GenrePublic:
     """
     Create new genre.
     """

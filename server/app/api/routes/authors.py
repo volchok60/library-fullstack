@@ -45,3 +45,20 @@ def read_authors(session: SessionDep, skip: int = 0, limit: int = 100) -> Author
     books = session.exec(statement).all()
 
     return AuthorsPublic(data=books, count=count)
+
+@router.post(
+    "/", response_model=AuthorPublic
+)
+def create_author(*, session: SessionDep, author_in: AuthorCreate) -> AuthorPublic:
+    """
+    Create new author.
+    """
+    author = crud.get_author_by_full_name(session=session, first_name=author_in.first_namename, family_name=author_in.family_name)
+    if author:
+        raise HTTPException(
+            status_code=400,
+            detail="Such author already exists in the system.",
+        )
+
+    author = crud.create_author(session=session, author_in=author_in)
+    return author

@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate, Genre, GenreCreate
+from app.models import User, UserCreate, UserUpdate, Genre, GenreCreate, Author, AuthorCreate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -45,7 +45,7 @@ def authenticate(*, session: Session, email: str, password: str) -> User | None:
         return None
     return db_user
 
-def get_genre_by_name(*, session: Session, name: str) -> User | None:
+def get_genre_by_name(*, session: Session, name: str) -> Genre | None:
     statement = select(Genre).where(Genre.name == name)
     genre = session.exec(statement).first()
     return genre
@@ -56,3 +56,15 @@ def create_genre(*, session: Session, genre_in: GenreCreate) -> Genre:
     session.commit()
     session.refresh(genre)
     return genre
+
+def get_author_by_full_name(*, session: Session, first_name: str, family_name: str) -> Author | None:
+    statement = select(Author).where((Author.first_name == first_name) & (Author.family_name == family_name))
+    author = session.exec(statement).first()
+    return author
+
+def create_author(*, session: Session, author_in: AuthorCreate) -> Author:
+    author = Author.model_validate(author_in)
+    session.add(author)
+    session.commit()
+    session.refresh(author)
+    return author
