@@ -45,3 +45,20 @@ def read_genres(session: SessionDep, skip: int = 0, limit: int = 100) -> GenresP
     genres = session.exec(statement).all()
 
     return GenresPublic(data=genres, count=count)
+
+@router.post(
+    "/", response_model=GenrePublic
+)
+def create_genre(*, session: SessionDep, genre_in: GenreCreate) -> Any:
+    """
+    Create new genre.
+    """
+    genre = crud.get_genre_by_name(session=session, name=genre_in.name)
+    if genre:
+        raise HTTPException(
+            status_code=400,
+            detail="This genre already exists in the system.",
+        )
+
+    genre = crud.create_genre(session=session, genre_in=genre_in)
+    return genre

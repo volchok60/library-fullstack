@@ -19,7 +19,7 @@ export default function BookCreate() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [authorsData, genresData] = await Promise.all([
+        const [{authorsData, authorsCount}, {genresData, genresCount}] = await Promise.all([
           getAuthors(),
           getGenres()
         ])

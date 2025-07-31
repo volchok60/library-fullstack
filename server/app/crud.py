@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate
+from app.models import User, UserCreate, UserUpdate, Genre, GenreCreate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -45,10 +45,14 @@ def authenticate(*, session: Session, email: str, password: str) -> User | None:
         return None
     return db_user
 
+def get_genre_by_name(*, session: Session, name: str) -> User | None:
+    statement = select(Genre).where(Genre.name == name)
+    genre = session.exec(statement).first()
+    return genre
 
-#def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -> Item:
-#    db_item = Item.model_validate(item_in, update={"owner_id": owner_id})
-#    session.add(db_item)
-#    session.commit()
-#    session.refresh(db_item)
-#    return db_item
+def create_genre(*, session: Session, genre_in: GenreCreate) -> Genre:
+    genre = Genre.model_validate(genre_in)
+    session.add(genre)
+    session.commit()
+    session.refresh(genre)
+    return genre
