@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { getAuthors, getGenres, createBook } from '../lib/api'
 import Author from '../components/Author'
 import Genre from '../components/Genre'
+import BookStatus from '../components/BookStatus'
 
 export default function BookCreate() {
   const navigate = useNavigate()
@@ -37,11 +38,18 @@ export default function BookCreate() {
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
 
+    const str = formData.get('due_date') as string
+    const dueDate = str ? new Date(str) : null
+
     const payload = {
       title: formData.get('title')?.toString() || '',
       authorId: parseInt(formData.get('author_id') as string),
       genreId: parseInt(formData.get('genre_id') as string),
-      summary: formData.get('summary')?.toString() || ''
+      summary: formData.get('summary')?.toString() || '',
+      imprint: formData.get('imprint')?.toString() || '',
+      dueBack: dueDate,
+      status: parseInt(formData.get('status') as string),
+      isbn: formData.get('isbn')?.toString() || ''
     }
 
     try {
@@ -62,6 +70,17 @@ export default function BookCreate() {
 
           <Author authors={authors} />
           <Genre genres={genres} />
+
+          <label className='sm:text-end'>Imprint:</label>
+          <input type="text" name="imprint" required />
+
+          <BookStatus />
+
+          <label className='sm:text-end'>ISBN:</label>
+          <input type="text" name="isbn" required />
+          
+          <label className='sm:text-end'>Due Date:</label>
+          <input type="date" name="due_date" />
 
           <label className='sm:text-end'>Summary:</label>
           <textarea name="summary" rows={10} cols={50} required />

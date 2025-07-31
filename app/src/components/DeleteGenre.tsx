@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteGenre } from '../lib/api'
 
-export default function DeleteGenre(id: number) {
+export default function DeleteGenre({ id }: { id: number }) {
   const navigate = useNavigate()
 
   async function deleteDialog() {

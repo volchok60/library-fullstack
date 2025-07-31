@@ -7,6 +7,6 @@ enum CopyStatus {
   InLibrary     
 }
 
-export function getBookCopyStatuses() {
+export function getBookStatuses() {
   return Object.values(CopyStatus).filter((value) => typeof value === "string");
 }

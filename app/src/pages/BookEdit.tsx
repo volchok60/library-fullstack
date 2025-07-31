@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { getBook, getAuthors, getGenres, updateBook } from '../lib/api'
 import Author from '../components/Author'
 import Genre from '../components/Genre'
+import BookStatus from '../components/BookStatus'
 
 export default function BookEdit() {
   const { id } = useParams<{ id: string }>()
@@ -37,11 +38,18 @@ export default function BookEdit() {
     const form = e.target as HTMLFormElement
     const formData = new FormData(form)
 
+    const str = formData.get('due_date') as string
+    const dueDate = str ? new Date(str) : null
+
     const payload = {
-      title: formData.get('title'),
-      author_id: parseInt(formData.get('author_id') as string),
-      genre_id: parseInt(formData.get('genre_id') as string),
-      summary: formData.get('summary')
+      title: formData.get('title') as string,
+      authorId: parseInt(formData.get('author_id') as string),
+      genreId: parseInt(formData.get('genre_id') as string),
+      summary: formData.get('summary') as string,
+      imprint: formData.get('imprint') as string,
+      dueBack: dueDate,
+      status: parseInt(formData.get('status') as string),
+      isbn: formData.get('isbn') as string
     }
 
     try {
@@ -54,6 +62,8 @@ export default function BookEdit() {
 
   if (!book) return <div>Loading...</div>
 
+  const dueDate = book.due_back?.split('T')[0]
+
   return (
     <div>
       <h1 className='text-center m-2'>Update Book</h1>
@@ -64,6 +74,17 @@ export default function BookEdit() {
           
           <Author authors={authors} selectedId={book.author.id} />
           <Genre genres={genres} selectedId={book.genre.id} />
+
+          <label className='sm:text-end'>Imprint:</label>
+          <input type="text" name="imprint" required defaultValue={book.imprint} />
+
+          <BookStatus selectedId={book.status} />
+
+          <label className='sm:text-end'>ISBN:</label>
+          <input type="text" name="isbn" required defaultValue={book.isbn} />
+          
+          <label className='sm:text-end'>Due Date:</label>
+          <input type="date" name="due_date" defaultValue={dueDate} />
 
           <label className='sm:text-end'>Summary:</label>
           <textarea name="summary" rows={10} cols={50} required defaultValue={book.summary} />

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteAuthor } from '../lib/api'
 
-export default function DeleteAuthor(id: number) {
+export default function DeleteAuthor({ id }: { id: number }) {
   const navigate = useNavigate()
 
   async function deleteDialog() {

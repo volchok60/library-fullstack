@@ -13,10 +13,6 @@ import Genres from './pages/Genres'
 import GenreDetails from './pages/GenreDetails'
 import GenreCreate from './pages/GenreCreate'
 import GenreEdit from './pages/GenreEdit'
-import Copies from './pages/Copies'
-import CopyDetails from './pages/CopyDetails'
-import CopyCreate from './pages/CopyCreate'
-import CopyEdit from './pages/CopyEdit'
 import Login from './pages/Login'
 import SignUp from './pages/signup'
 import RecoverPassword from './pages/recover-password'
@@ -38,10 +34,6 @@ function App() {
         <Route path="/genres/:id" element={<GenreDetails />} />
         <Route path="/genres/create" element={<GenreCreate />} />
         <Route path="/genres/:id/edit" element={<GenreEdit />} />
-        <Route path="/copies" element={<Copies />} />
-        <Route path="/copies/:id" element={<CopyDetails />} />
-        <Route path="/copies/create" element={<CopyCreate />} />
-        <Route path="/copies/:id/edit" element={<CopyEdit />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/recover-password" element={<RecoverPassword />} />

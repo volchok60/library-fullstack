@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import { getBookCopyStatuses } from '../lib/utils';
+import { getBookStatuses } from '../lib/utils';
 
-interface BookCopyStatusProps {
+interface BookStatusProps {
   selectedId?: number
 }
 
-export default function BookCopyStatus({selectedId}: BookCopyStatusProps) {
-  const statuses = getBookCopyStatuses();
+export default function BookStatus({selectedId}: BookStatusProps) {
+  const statuses = getBookStatuses();
   const [statusId, setStatusId] = useState(selectedId)
 
   return (

@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { deleteBook } from '../lib/api'
 
-export default function DeleteBook(id: number) {
+export default function DeleteBook({ id }: { id: number }) {
   const navigate = useNavigate()
 
   async function deleteDialog() {

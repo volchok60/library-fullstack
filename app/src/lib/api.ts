@@ -87,17 +87,17 @@ export async function getBooks() {
   return books
 }
 
-export async function getBookCopies() {
-  const resp = await fetch(`${baseUrl}/api/v1/copies`)
+export async function getAvailableBooks() {
+  const resp = await fetch(`${baseUrl}/api/v1/books/available`)
 
   if (!resp.ok) {
     console.log('status:', resp.status, 'statusText:', resp.statusText)
     // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch books')
+    throw new Error('Failed to fetch available books')
   }
 
-  const copies = await resp.json()
-  return copies
+  const availableBooks = await resp.json()
+  return availableBooks
 }
 
 export async function getAuthor(id: number) {
@@ -139,19 +139,6 @@ export async function getGenre(id: number) {
   return genre
 }
 
-export async function getBookCopy(id: number) {
-  const resp = await fetch(`${baseUrl}/api/v1/copies/${id}`)
-
-  if (!resp.ok) {
-    console.log('status:', resp.status, 'statusText:', resp.statusText)
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch BookCopy')
-  }
-
-  const bookCopy = await resp.json()
-  return bookCopy
-}
-
 export async function deleteAuthor(id: number): Promise<number> {
   const response = await fetch(`/api/v1/authors/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('Failed to delete author for id: ' + id);
@@ -161,12 +148,6 @@ export async function deleteAuthor(id: number): Promise<number> {
 export async function deleteBook(id: number): Promise<number> {
   const response =  await fetch(`/api/v1/books/${id}`, { method: 'DELETE' });
   if (!response.ok) throw new Error('Failed to delete book for id: ' + id);
-  return id;
-}
-
-export async function deleteBookCopy(id: number): Promise<number> {
-  const response = await fetch(`/api/v1/copies/${id}`, { method: 'DELETE' });
-  if (!response.ok) throw new Error('Failed to delete book copy for id: ' + id);
   return id;
 }
 
@@ -199,6 +180,10 @@ export async function createBook(payload: {
   authorId: number;
   genreId: number;
   summary: string;
+  imprint: string;
+  dueBack: Date | null;
+  status: number;
+  isbn: string;
 }) {
   const response = await fetch('/apiv1/books', {
     method: 'POST',
@@ -207,24 +192,6 @@ export async function createBook(payload: {
   });
   if (!response.ok) {
     throw new Error('Failed to create book');
-  }
-  return await response.json();
-}
-
-export async function createBookCopy(payload: {
-  bookId: number;
-  imprint: string;
-    dueBack: Date | null;
-    status: number;
-    isbn: string;
-}) {
-  const response = await fetch('/api/v1/copies', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to create book copy');
   }
   return await response.json();
 }
@@ -266,6 +233,10 @@ export async function updateBook(id: number, payload: {
   authorId: number;
   genreId: number;
   summary: string;
+  imprint: string;
+  dueBack: Date | null;
+  status: number;
+  isbn: string;
 }) {
   const response = await fetch(`/api/v1/books/${id}`, {
     method: 'PUT',
@@ -274,24 +245,6 @@ export async function updateBook(id: number, payload: {
   });
   if (!response.ok) {
     throw new Error('Failed to update book');
-  }
-  return await response.json();
-}
-
-export async function updateBookCopy(id: number, payload: {
-  bookId: number;
-  imprint: string;
-  dueBack: Date | null;
-  status: number;
-  isbn: string;
-}) {
-  const response = await fetch(`/api/v1/copies/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
-  if (!response.ok) {
-    throw new Error('Failed to update book copy');
   }
   return await response.json();
 }
