@@ -32,7 +32,7 @@ interface UserRegisterForm extends UserRegister {
 }
 
 function SignUp() {
-  const { signUpMutation } = useAuth()
+  // const { signUpMutation } = useAuth()
   const {
     register,
     handleSubmit,
@@ -50,7 +50,7 @@ function SignUp() {
   })
 
   const onSubmit: SubmitHandler<UserRegisterForm> = (data) => {
-    signUpMutation.mutate(data)
+    // signUpMutation.mutate(data)
   }
 
   return (

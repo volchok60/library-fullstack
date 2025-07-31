@@ -3,13 +3,12 @@
 import { useState } from "react"
 
 import {
-  type Body_login_login_access_token as AccessToken,
-  type ApiError,
-  LoginService,
+  type BodyLoginLoginAccessToken as AccessToken,
   type UserPublic,
   type UserRegister,
-  UsersService,
 } from "../client"
+import { LoginService, UsersService } from "../core/sdk.gen"
+import { type ApiError } from "../core/ApiError"
 import { handleError } from "../utils"
 
 const isLoggedIn = () => {
@@ -20,6 +19,7 @@ const useAuth = () => {
   const [error, setError] = useState<string | null>(null)
   // const navigate = useNavigate()
   // const queryClient = useQueryClient()
+  const user = null //FIXME: Replace with actual user fetching logic
   // const { data: user } = useQuery<UserPublic | null, Error>({
   //   queryKey: ["currentUser"],
   //   queryFn: UsersService.readUserMe,
