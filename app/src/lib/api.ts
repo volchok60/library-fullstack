@@ -24,20 +24,8 @@ export async function booksCount() {
   return resp.headers.get('x-result-count')
 }
 
-export async function copiesCount() {
-  const resp = await fetch(`${baseUrl}/api/v1/copies`, {
-    method: "HEAD"
-  })
-
-  if (!resp.ok) {
-    console.log('status:', resp.status, 'statusText:', resp.statusText)
-    throw new Error('Failed to fetch book copies count')
-  }
-  return resp.headers.get('x-result-count')
-}
-
-export async function availableCopiesCount() {
-  const resp = await fetch(`${baseUrl}/api/v1/copies/available`, {
+export async function availableBooksCount() {
+  const resp = await fetch(`${baseUrl}/api/v1/books/available`, {
     method: "HEAD"
   })
 

@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { booksCount, copiesCount, availableCopiesCount, authorsCount, genresCount } from '../lib/api'
+import { booksCount, availableBooksCount, authorsCount, genresCount } from '../lib/api'
 
 export default function Home() {
   const [counts, setCounts] = useState({
     books: -1,
-    copies: -1,
-    availableCopies: -1,
+    availableBooks: -1,
     authors: -1,
     genres: -1
   })
@@ -16,18 +15,16 @@ export default function Home() {
     async function fetchCounts() {
       try {
          
-        const [books, copies, availableCopies, authors, genres] = await Promise.all([
+        const [books, availableBooks, authors, genres] = await Promise.all([
           booksCount(),
-          copiesCount(),
-          availableCopiesCount(),
+          availableBooksCount(),
           authorsCount(),
           genresCount()
         ])
         
         setCounts({
           books: parseInt(books || '0'),
-          copies: parseInt(copies || '0'),
-          availableCopies: parseInt(availableCopies || '0'),
+          availableBooks: parseInt(availableBooks || '0'),
           authors: parseInt(authors || '0'),
           genres: parseInt(genres || '0')
         })
@@ -67,19 +64,11 @@ export default function Home() {
       description: 'Book categories'
     },
     {
-      title: 'Total Copies',
-      count: counts.copies,
-      icon: '📖',
-      color: 'from-orange-500 to-orange-600',
-      link: '/copies',
-      description: 'Physical book copies'
-    },
-    {
       title: 'Available',
-      count: counts.availableCopies,
+      count: counts.availableBooks,
       icon: '✅',
       color: 'from-emerald-500 to-emerald-600',
-      link: '/copies',
+      link: '/books/available',
       description: 'Ready to borrow'
     }
   ]
@@ -145,7 +134,6 @@ export default function Home() {
               { title: 'Add New Book', link: '/books/create', icon: '➕', color: 'bg-blue-500 hover:bg-blue-600' },
               { title: 'Add Author', link: '/authors/create', icon: '👤', color: 'bg-purple-500 hover:bg-purple-600' },
               { title: 'Add Genre', link: '/genres/create', icon: '🏷️', color: 'bg-green-500 hover:bg-green-600' },
-              { title: 'Add Copy', link: '/copies/create', icon: '📄', color: 'bg-orange-500 hover:bg-orange-600' }
             ].map((action) => (
               <Link
                 key={action.title}
