@@ -3,9 +3,10 @@ import { Container, Heading, Text } from "@chakra-ui/react"
 // import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router"
 import { type SubmitHandler, useForm } from "react-hook-form"
 import { FiLock } from "react-icons/fi"
-
+import { useNavigate, Link } from 'react-router-dom'
 import { type NewPassword } from "../client"
-import { type ApiError, LoginService } from "../core/sdk.gen"
+import { LoginService } from "../core/sdk.gen"
+import { type ApiError } from "../core/ApiError"
 import { Button } from "../components/ui/button"
 import { PasswordInput } from "../components/ui/password-input"
 import { isLoggedIn } from "../hooks/useAuth"
@@ -42,7 +43,7 @@ function ResetPassword() {
     },
   })
   const { showSuccessToast } = useCustomToast()
-  // const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const resetPassword = async (data: NewPassword) => {
     const token = new URLSearchParams(window.location.search).get("token")

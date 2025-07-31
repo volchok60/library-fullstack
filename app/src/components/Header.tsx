@@ -103,13 +103,6 @@ export default function Header() {
               >
                 Books
               </Link>
-              <Link 
-                to="/copies" 
-                className="text-gray-700 hover:text-teal-600 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Book Copies
-              </Link>
               <div className="pt-2 border-t border-gray-200 mt-2">
                 <LoginFlip />
               </div>
