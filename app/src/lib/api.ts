@@ -158,11 +158,13 @@ export async function deleteGenre(id: number): Promise<number> {
 }
 
 export async function createAuthor(payload: {
-  firstName: string;
-  familyName: string;
-  birthDate: Date;
-  deathDate: Date | null;
-  lifeSpan: string;
+  first_name: string;
+  family_name: string;
+  // birth_date: Date;
+  // death_date: Date | null;
+  birth_date: string;
+  death_date: string | null;
+  life_span: string;
 }) {
   const response = await fetch(`${baseUrl}/api/v1/authors`, {
     method: 'POST',

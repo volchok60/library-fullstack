@@ -1,3 +1,4 @@
+import sys
 import uuid
 from typing import Any
 
@@ -12,11 +13,22 @@ from app.api.deps import (
 from app.models import (
     Message,
     Author,
+    AuthorBase,
     AuthorCreate,
     AuthorPublic,
     AuthorUpdate,
     AuthorsPublic,
 )
+
+import logging
+
+#logger = logging.getLogger(__name__)
+#stream_handler = logging.StreamHandler(sys.stdout)
+#log_formatter = logging.Formatter("%(asctime)s [%(processName)s: %(process)d] [%(threadName)s: %(thread)d] [%(levelname)s] %(name)s: %(message)s")
+#stream_handler.setFormatter(log_formatter)
+#logger.addHandler(stream_handler)
+
+logger = logging.getLogger("uvicorn")
 
 router = APIRouter(prefix="/authors", tags=["authors"])
 
@@ -31,7 +43,7 @@ async def authors_count(session: SessionDep) -> Response:
 
 @router.get(
     "/",
-    response_model=AuthorsPublic,
+    response_model=AuthorsPublic
 )
 def read_authors(session: SessionDep, skip: int = 0, limit: int = 100) -> AuthorsPublic:
     """
@@ -40,11 +52,11 @@ def read_authors(session: SessionDep, skip: int = 0, limit: int = 100) -> Author
 
     count_statement = select(func.count()).select_from(Author)
     count = session.exec(count_statement).one()
-    # Fetch all authors
+    
     statement = select(Author).offset(skip).limit(limit)
-    books = session.exec(statement).all()
+    authors = session.exec(statement).all()
 
-    return AuthorsPublic(data=books, count=count)
+    return AuthorsPublic(data=authors, count=count)
 
 @router.post(
     "/", response_model=AuthorPublic
@@ -53,6 +65,8 @@ def create_author(*, session: SessionDep, author_in: AuthorCreate) -> AuthorPubl
     """
     Create new author.
     """
+    logger.info(f"Received author_in: {author_in}")
+
     author = crud.get_author_by_full_name(session=session, first_name=author_in.first_namename, family_name=author_in.family_name)
     if author:
         raise HTTPException(

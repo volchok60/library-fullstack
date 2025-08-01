@@ -79,7 +79,7 @@ class AuthorBase(SQLModel):
     family_name: str = Field(max_length=255)
     birth_date: datetime
     death_date: datetime | None = Field(default=None)
-    life_span: str | None = Field(default=None, max_length=255)
+    life_span: str | None = Field(default=None, max_length=1000)
 
 class AuthorCreate(AuthorBase):
     created_at: datetime = Field(default_factory=datetime.now)

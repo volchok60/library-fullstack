@@ -16,11 +16,13 @@ export default function AuthorCreate() {
     e.preventDefault()
 
     const payload = {
-      firstName: formData.firstName,
-      familyName: formData.familyName,
-      birthDate: new Date(formData.birthDate),
-      deathDate: formData.deathDate ? new Date(formData.deathDate) : null,
-      lifeSpan: formData.lifeSpan
+      first_name: formData.firstName,
+      family_name: formData.familyName,
+      // birth_date: new Date(formData.birthDate),
+      // death_date: formData.deathDate ? new Date(formData.deathDate) : null,
+      birth_date: formData.birthDate,
+      death_date: formData.deathDate ? formData.deathDate : null,
+      life_span: formData.lifeSpan
     }
 
     try {
