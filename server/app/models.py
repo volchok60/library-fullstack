@@ -1,5 +1,5 @@
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 
@@ -77,8 +77,8 @@ class GenresPublic(SQLModel):
 class AuthorBase(SQLModel):
     first_name: str = Field(max_length=255)
     family_name: str = Field(max_length=255)
-    birth_date: datetime
-    death_date: datetime | None = Field(default=None)
+    birth_date: date
+    death_date: date | None = Field(default=None)
     life_span: str | None = Field(default=None, max_length=1000)
 
 class AuthorCreate(AuthorBase):
@@ -88,8 +88,8 @@ class AuthorCreate(AuthorBase):
 class AuthorUpdate(AuthorBase):
     first_name: str | None = Field(default=None, max_length=255)
     family_name: str | None = Field(default=None, max_length=255)
-    birth_date: datetime | None = Field(default=None)
-    death_date: datetime | None = Field(default=None)
+    birth_date: date | None = Field(default=None)
+    death_date: date | None = Field(default=None)
     life_span: str | None = Field(default=None, max_length=1000)
     updated_at: datetime = Field(default_factory=datetime.now)
 
@@ -103,8 +103,8 @@ class AuthorPublic(AuthorBase):
     id: uuid.UUID
     first_name: str
     family_name: str
-    birth_date: datetime
-    death_date: datetime | None = Field(default=None)
+    birth_date: date
+    death_date: date | None = Field(default=None)
     life_span: str | None = Field(default=None, max_length=1000)
 
 class AuthorsPublic(SQLModel):
