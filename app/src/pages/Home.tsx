@@ -21,7 +21,7 @@ export default function Home() {
           authorsCount(),
           genresCount()
         ])
-        
+        console.log('genres count: ', genres)
         setCounts({
           books: parseInt(books || '0'),
           availableBooks: parseInt(availableBooks || '0'),

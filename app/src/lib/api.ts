@@ -162,8 +162,6 @@ export async function createAuthor(payload: {
   family_name: string;
   birth_date: Date;
   death_date: Date | null;
-  // birth_date: string;
-  // death_date: string | null;
   life_span: string;
 }) {
   const response = await fetch(`${baseUrl}/api/v1/authors`, {
@@ -179,11 +177,11 @@ export async function createAuthor(payload: {
 
 export async function createBook(payload: {
   title: string;
-  authorId: number;
-  genreId: number;
+  author_id: number;
+  genre_id: number;
   summary: string;
   imprint: string;
-  dueBack: Date | null;
+  due_back: Date | null;
   status: number;
   isbn: string;
 }) {

@@ -20,8 +20,6 @@ export default function AuthorCreate() {
       family_name: formData.familyName,
       birth_date: new Date(formData.birthDate),
       death_date: formData.deathDate ? new Date(formData.deathDate) : null,
-      // birth_date: formData.birthDate,
-      // death_date: formData.deathDate ? formData.deathDate : null,
       life_span: formData.lifeSpan
     }
 
