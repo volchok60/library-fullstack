@@ -90,7 +90,7 @@ class AuthorUpdate(AuthorBase):
     family_name: str | None = Field(default=None, max_length=255)
     birth_date: datetime | None = Field(default=None)
     death_date: datetime | None = Field(default=None)
-    life_span: str | None = Field(default=None, max_length=255)
+    life_span: str | None = Field(default=None, max_length=1000)
     updated_at: datetime = Field(default_factory=datetime.now)
 
 class Author(AuthorBase, table=True):
@@ -105,7 +105,7 @@ class AuthorPublic(AuthorBase):
     family_name: str
     birth_date: datetime
     death_date: datetime | None = Field(default=None)
-    life_span: str | None = Field(default=None, max_length=255)
+    life_span: str | None = Field(default=None, max_length=1000)
 
 class AuthorsPublic(SQLModel):
     data: list[AuthorPublic]

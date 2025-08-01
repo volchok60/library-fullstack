@@ -67,7 +67,7 @@ def create_author(*, session: SessionDep, author_in: AuthorCreate) -> AuthorPubl
     """
     logger.info(f"Received author_in: {author_in}")
 
-    author = crud.get_author_by_full_name(session=session, first_name=author_in.first_namename, family_name=author_in.family_name)
+    author = crud.get_author_by_full_name(session=session, first_name=author_in.first_name, family_name=author_in.family_name)
     if author:
         raise HTTPException(
             status_code=400,
