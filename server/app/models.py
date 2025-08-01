@@ -1,6 +1,7 @@
 import uuid
 from datetime import date, datetime
 from pydantic import EmailStr
+from pydantic_extra_types.isbn import ISBN
 from sqlmodel import Field, Relationship, SQLModel
 
 # User model definitions
@@ -67,7 +68,6 @@ class Genre(GenreBase, table=True):
 
 class GenrePublic(GenreBase):
     id: uuid.UUID
-    name: str
 
 class GenresPublic(SQLModel):   
     data: list[GenrePublic]
@@ -101,11 +101,6 @@ class Author(AuthorBase, table=True):
 
 class AuthorPublic(AuthorBase):
     id: uuid.UUID
-    first_name: str
-    family_name: str
-    birth_date: date
-    death_date: date | None = Field(default=None)
-    life_span: str | None = Field(default=None, max_length=1000)
 
 class AuthorsPublic(SQLModel):
     data: list[AuthorPublic]
@@ -116,9 +111,9 @@ class BookBase(SQLModel):
     title: str = Field(max_length=255)
     summary: str | None = Field(default=None, max_length=1000)
     imprint: str | None = Field(default=None, max_length=255)
-    due_back: datetime | None = Field(default=None)
+    due_back: date | None = Field(default=None)
     status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
-    isbn: str | None = Field(default=None, max_length=13)
+    isbn: ISBN | None = Field(default=None, max_length=13)
 
 class BookCreate(BookBase):
     created_at: datetime = Field(default_factory=datetime.now)
@@ -127,10 +122,9 @@ class BookCreate(BookBase):
 class BookUpdate(BookBase):
     title: str | None = Field(default=None, max_length=255)
     imprint: str | None = Field(default=None, max_length=255)
-    due_back: datetime | None = Field(default=None)
+    due_back: date | None = Field(default=None)
     status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
-    isbn: str | None = Field(default=None, max_length=13)
-    updated_at: datetime = Field(default_factory=datetime.now)
+    isbn: ISBN | None = Field(default=None, max_length=13)
     summary: str | None = Field(default=None, max_length=1000)
     updated_at: datetime = Field(default_factory=datetime.now)
 
@@ -149,14 +143,8 @@ class Book(BookBase, table=True):
 
 class BookPublic(BookBase):
     id: uuid.UUID
-    title: str
-    summary: str | None = Field(default=None, max_length=1000)
     author_id: uuid.UUID
     genre_id: uuid.UUID
-    imprint: str | None = Field(default=None, max_length=255)
-    due_back: datetime | None = Field(default=None)
-    status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
-    isbn: str | None = Field(default=None, max_length=13)
 
 class BooksPublic(SQLModel):
     data: list[BookPublic]
