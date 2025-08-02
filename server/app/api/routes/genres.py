@@ -12,6 +12,7 @@ from app.api.deps import (
 from app.models import (
     Message,
     Genre,
+    GenreBase,
     GenreCreate,
     GenrePublic,
     GenreUpdate,
@@ -44,16 +45,14 @@ def read_genres(session: SessionDep, skip: int = 0, limit: int = 100) -> GenresP
     statement = select(Genre).offset(skip).limit(limit)
     genres = session.exec(statement).all()
 
-    return GenresPublic(data=genres, count=count)
+    return GenresPublic(genres=genres, count=count)
 
-@router.post(
-    "/", response_model=GenrePublic
-)
+@router.post("/", response_model=GenrePublic)
 def create_genre(*, session: SessionDep, genre_in: GenreCreate) -> GenrePublic:
     """
     Create new genre.
     """
-    genre = crud.get_genre_by_name(session=session, name=genre_in.name)
+    genre = crud.get_genre_by_title(session=session, title=genre_in.title)
     if genre:
         raise HTTPException(
             status_code=400,
@@ -61,4 +60,14 @@ def create_genre(*, session: SessionDep, genre_in: GenreCreate) -> GenrePublic:
         )
 
     genre = crud.create_genre(session=session, genre_in=genre_in)
+    return genre
+
+@router.get("/{genre_id}", response_model=GenrePublic)
+def read_genre_by_id(
+    genre_id: int, session: SessionDep
+) -> Any:
+    """
+    Get a specific genre by id.
+    """
+    genre = session.get(Genre, genre_id)
     return genre

@@ -50,27 +50,27 @@ class UsersPublic(SQLModel):
 
 # Genre model definitions
 class GenreBase(SQLModel):
-    name: str = Field(unique=True, index=True, max_length=255)
+    title: str = Field(unique=True, index=True, max_length=255)
 
 class GenreCreate(GenreBase):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
 
 class GenreUpdate(GenreBase):
-    name: str = Field(max_length=255)
+    title: str = Field(max_length=255)
     updated_at: datetime = Field(default_factory=datetime.now)  
 
 class Genre(GenreBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     books: list["Book"] = Relationship(back_populates="genre", cascade_delete=True)
 
 class GenrePublic(GenreBase):
-    id: uuid.UUID
+    id: int
 
 class GenresPublic(SQLModel):   
-    data: list[GenrePublic]
+    genres: list[GenrePublic]
     count: int
 
 # Author model definitions
@@ -94,16 +94,16 @@ class AuthorUpdate(AuthorBase):
     updated_at: datetime = Field(default_factory=datetime.now)
 
 class Author(AuthorBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
     books: list["Book"] = Relationship(back_populates="author", cascade_delete=True)
 
 class AuthorPublic(AuthorBase):
-    id: uuid.UUID
+    id: int
 
 class AuthorsPublic(SQLModel):
-    data: list[AuthorPublic]
+    authors: list[AuthorPublic]
     count: int
 
 # Book model definitions
@@ -129,25 +129,25 @@ class BookUpdate(BookBase):
     updated_at: datetime = Field(default_factory=datetime.now)
 
 class Book(BookBase, table=True):
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    id: int | None = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
-    author_id: uuid.UUID = Field(
+    author_id: int = Field(
         foreign_key="author.id", nullable=False, ondelete="CASCADE"
     )
     author: Author | None = Relationship(back_populates="books") 
-    genre_id: uuid.UUID = Field(
+    genre_id: int = Field(
         foreign_key="genre.id", nullable=False, ondelete="CASCADE"
     )
     genre: Genre | None = Relationship(back_populates="books")
 
 class BookPublic(BookBase):
-    id: uuid.UUID
-    author_id: uuid.UUID
-    genre_id: uuid.UUID
+    id: int
+    author_id: int
+    genre_id: int
 
 class BooksPublic(SQLModel):
-    data: list[BookPublic]
+    books: list[BookPublic]
     count: int
 
 # Generic message

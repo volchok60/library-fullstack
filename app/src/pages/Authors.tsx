@@ -11,8 +11,8 @@ export default function Authors() {
   useEffect(() => {
     async function fetchAuthors() {
       try {
-        const {data, count} = await getAuthors()
-        setAuthors(data)
+        const {authors, count} = await getAuthors()
+        setAuthors(authors)
       } catch (error) {
         console.error('Failed to fetch authors:', error)
       } finally {

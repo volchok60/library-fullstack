@@ -11,8 +11,8 @@ export default function Books() {
   useEffect(() => {
     async function fetchBooks() {
       try {
-        const {data, count} = await getBooks()
-        setBooks(data)
+        const {books, count} = await getBooks()
+        setBooks(books)
       } catch (error) {
         console.error('Failed to fetch books:', error)
       } finally {

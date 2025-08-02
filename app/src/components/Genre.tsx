@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 export interface GenreType {
   id: number
-  name: string
+  title: string
 }
 
 interface GenreProps { 
@@ -20,7 +20,7 @@ export default function Genre({ genres, selectedId}: GenreProps) {
         <option>----- select -----</option>
         {genres && genres.map((genre: GenreType) => (
           <option key={genre.id} value={genre.id}>
-            {genre.name}
+            {genre.title}
           </option>
         ))}
       </select>

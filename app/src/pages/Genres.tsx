@@ -11,8 +11,8 @@ export default function Genres() {
   useEffect(() => {
     async function fetchGenres() {
       try {
-        const {data, count} = await getGenres()
-        setGenres(data)
+        const {genres, count} = await getGenres()
+        setGenres(genres)
       } catch (error) {
         console.error('Failed to fetch genres:', error)
       } finally {
@@ -24,7 +24,7 @@ export default function Genres() {
   }, [])
 
   const filteredGenres = genres.filter(genre =>
-    genre.name.toLowerCase().includes(searchTerm.toLowerCase())
+    genre.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   // Genre icons mapping for visual appeal
@@ -184,14 +184,14 @@ export default function Genres() {
                   {/* Genre Icon */}
                   <div className={`flex items-center justify-center w-16 h-16 bg-gradient-to-r ${getGenreColor(index)} rounded-full mb-4 mx-auto shadow-lg`}>
                     <span className="text-2xl">
-                      {getGenreIcon(genre.name)}
+                      {getGenreIcon(genre.title)}
                     </span>
                   </div>
 
                   {/* Genre Info */}
                   <div className="text-center">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors duration-200">
-                      {genre.name}
+                      {genre.title}
                     </h3>
                     <p className="text-sm text-gray-500 mb-4">Literary Category</p>
                     
@@ -222,8 +222,8 @@ export default function Genres() {
                   key={`showcase-${genre.id}`}
                   className={`bg-gradient-to-r ${getGenreColor(index)} text-white rounded-lg p-3 text-center shadow-md hover:shadow-lg transition-shadow duration-200`}
                 >
-                  <div className="text-2xl mb-1">{getGenreIcon(genre.name)}</div>
-                  <div className="text-xs font-medium truncate">{genre.name}</div>
+                  <div className="text-2xl mb-1">{getGenreIcon(genre.title)}</div>
+                  <div className="text-xs font-medium truncate">{genre.title}</div>
                 </div>
               ))}
             </div>

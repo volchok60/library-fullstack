@@ -45,8 +45,8 @@ def authenticate(*, session: Session, email: str, password: str) -> User | None:
         return None
     return db_user
 
-def get_genre_by_name(*, session: Session, name: str) -> Genre | None:
-    statement = select(Genre).where(Genre.name == name)
+def get_genre_by_title(*, session: Session, title: str) -> Genre | None:
+    statement = select(Genre).where(Genre.title == title)
     genre = session.exec(statement).first()
     return genre
 

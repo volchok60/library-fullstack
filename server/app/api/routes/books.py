@@ -44,4 +44,4 @@ def read_books(session: SessionDep, skip: int = 0, limit: int = 100) -> BooksPub
     statement = select(Book).offset(skip).limit(limit)
     books = session.exec(statement).all()
 
-    return BooksPublic(data=books, count=count)
+    return BooksPublic(books=books, count=count)

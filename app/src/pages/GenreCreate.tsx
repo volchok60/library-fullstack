@@ -4,12 +4,12 @@ import { createGenre } from '../lib/api'
 
 export default function GenreCreate() {
   const navigate = useNavigate()
-  const [name, setName] = useState('')
+  const [title, setTitle] = useState('')
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    const payload = { name }
+    const payload = { title }
 
     try {
       await createGenre(payload)
@@ -28,8 +28,8 @@ export default function GenreCreate() {
           <input 
             type='text' 
             required 
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={title}
+            onChange={e => setTitle(e.target.value)}
           />
         </div>
         <div className='text-center'>

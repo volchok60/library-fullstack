@@ -29,7 +29,7 @@ export default function GenreDetails() {
       <h1 className='text-center m-2'>Genre Details</h1>
       <p className=" text-center mb-2">
         <span className="underline">
-          {genre.name}
+          {genre.title}
         </span>
       </p>
       <div className='text-center'>

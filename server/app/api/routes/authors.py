@@ -50,7 +50,7 @@ def read_authors(session: SessionDep, skip: int = 0, limit: int = 100) -> Author
     statement = select(Author).offset(skip).limit(limit)
     authors = session.exec(statement).all()
 
-    return AuthorsPublic(data=authors, count=count)
+    return AuthorsPublic(authors=authors, count=count)
 
 @router.post(
     "/", response_model=AuthorPublic

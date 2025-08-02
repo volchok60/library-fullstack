@@ -197,7 +197,7 @@ export async function createBook(payload: {
 }
 
 export async function createGenre(payload: {
-  name: string;
+  title: string;
 }) {
   const response = await fetch(`${baseUrl}/api/v1/genres`, {
     method: 'POST',

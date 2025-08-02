@@ -26,13 +26,13 @@ export default function BookCreate() {
     async function fetchData() {
       try {
         setLoading(true);
-        const [{data: authorsData, count: authorsCount}, {data: genresData, count: genresCount}] = await Promise.all([
+        const [{authors, count: authorsCount}, {genres, count: genresCount}] = await Promise.all([
           getAuthors(),
           getGenres()
         ])
-        console.log('Authors: ', authorsData)
-        setAuthors(authorsData)
-        setGenres(genresData)
+        console.log('Authors: ', authors)
+        setAuthors(authors)
+        setGenres(genres)
       } catch (err: Error | any) {
         setError(err);
         console.error('Failed to fetch data:', err)
