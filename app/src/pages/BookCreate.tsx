@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAuthors, getGenres, createBook } from '../lib/api'
-import Author from '../components/Author'
-import Genre from '../components/Genre'
 import BookStatus from '../components/BookStatus'
+import { AuthorType, GenreType } from '../lib/utils'
 
 export default function BookCreate() {
   const navigate = useNavigate()
@@ -30,7 +29,7 @@ export default function BookCreate() {
           getAuthors(),
           getGenres()
         ])
-        console.log('Authors: ', authors)
+        console.log('Fetched authors:', authors, 'Count:', authorsCount)
         setAuthors(authors)
         setGenres(genres)
       } catch (err: Error | any) {
@@ -60,6 +59,7 @@ export default function BookCreate() {
       status: formData.status,
       isbn: formData.isbn
     }
+    console.log('Create book request: ', payload)
 
     try {
       await createBook(payload)
@@ -89,7 +89,7 @@ export default function BookCreate() {
     )
   }
 
-  if (error) return <div>Error: {error.message}</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div>
@@ -100,8 +100,25 @@ export default function BookCreate() {
           <input type="text" name="title" required value={formData.title}
             onChange={e => setFormData({...formData, title: e.target.value})} />
 
-          <Author authors={authors} />
-          <Genre genres={genres} />
+          <label className='sm:text-end'>Author:</label>
+          <select name='author_id' value={formData.authorId} required onChange={e => setFormData({...formData, authorId: e.target.value})}>
+            <option>----- select -----</option>
+            {authors && authors.map((author: AuthorType) => (
+              <option key={author.id} value={author.id}>
+                {author.first_name}{' '}{author.family_name}
+              </option>
+            ))}
+          </select>
+
+          <label className='sm:text-end'>Genre:</label>
+          <select name='genre_id' value={formData.genreId} required onChange={e => setFormData({...formData,  genreId: e.target.value})}>
+            <option>----- select -----</option>
+            {genres && genres.map((genre: GenreType) => (
+              <option key={genre.id} value={genre.id}>
+                {genre.title}
+              </option>
+            ))}
+          </select>
 
           <label className='sm:text-end'>Imprint:</label>
           <input type="text" name="imprint" required value={formData.imprint}

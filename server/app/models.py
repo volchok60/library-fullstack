@@ -114,6 +114,12 @@ class BookBase(SQLModel):
     due_back: date | None = Field(default=None)
     status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
     isbn: ISBN | None = Field(default=None, max_length=13)
+    author_id: int = Field(
+        foreign_key="author.id", nullable=False, ondelete="CASCADE"
+    )
+    genre_id: int = Field(
+        foreign_key="genre.id", nullable=False, ondelete="CASCADE"
+    )
 
 class BookCreate(BookBase):
     created_at: datetime = Field(default_factory=datetime.now)
@@ -132,13 +138,7 @@ class Book(BookBase, table=True):
     id: int | None = Field(default=None, primary_key=True)
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: datetime = Field(default_factory=datetime.now)
-    author_id: int = Field(
-        foreign_key="author.id", nullable=False, ondelete="CASCADE"
-    )
     author: Author | None = Relationship(back_populates="books") 
-    genre_id: int = Field(
-        foreign_key="genre.id", nullable=False, ondelete="CASCADE"
-    )
     genre: Genre | None = Relationship(back_populates="books")
 
 class BookPublic(BookBase):
