@@ -52,9 +52,7 @@ def read_authors(session: SessionDep, skip: int = 0, limit: int = 100) -> Author
 
     return AuthorsPublic(authors=authors, count=count)
 
-@router.post(
-    "/", response_model=AuthorPublic
-)
+@router.post("/", response_model=AuthorPublic)
 def create_author(*, session: SessionDep, author_in: AuthorCreate) -> AuthorPublic:
     """
     Create new author.
@@ -69,4 +67,14 @@ def create_author(*, session: SessionDep, author_in: AuthorCreate) -> AuthorPubl
         )
 
     author = crud.create_author(session=session, author_in=author_in)
+    return author
+
+@router.get("/{id}", response_model=AuthorPublic)
+def read_author_by_id(
+    id: int, session: SessionDep
+) -> Any:
+    """
+    Get a specific author by id.
+    """
+    author = session.get(Author, id)
     return author

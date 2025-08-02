@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import User, UserCreate, UserUpdate, Genre, GenreCreate, Author, AuthorCreate
+from app.models import User, UserCreate, UserUpdate, Genre, GenreCreate, Author, AuthorCreate, Book, BookCreate
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -68,3 +68,15 @@ def create_author(*, session: Session, author_in: AuthorCreate) -> Author:
     session.commit()
     session.refresh(author)
     return author
+
+def get_book_by_title(*, session: Session, title: str) -> Book | None:
+    statement = select(Book).where(Book.title == title)
+    book = session.exec(statement).first()
+    return book
+
+def create_book(*, session: Session, book_in: BookCreate) -> Book:
+    book = Book.model_validate(book_in)
+    session.add(book)
+    session.commit()
+    session.refresh(book)
+    return book

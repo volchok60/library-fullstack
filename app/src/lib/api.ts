@@ -185,7 +185,7 @@ export async function createBook(payload: {
   status: number;
   isbn: string;
 }) {
-  const response = await fetch(`${baseUrl}/apiv1/books`, {
+  const response = await fetch(`${baseUrl}/api/v1/books`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
@@ -250,7 +250,7 @@ export async function updateBook(id: number, payload: {
 }
 
 export async function updateGenre(id: number, payload: {
-  name: string;
+  title: string;
 }) {
   const response = await fetch(`${baseUrl}/api/v1/genres/${id}`, {
     method: 'PUT',

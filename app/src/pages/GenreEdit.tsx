@@ -5,14 +5,14 @@ import { getGenre, updateGenre } from '../lib/api'
 export default function GenreEdit() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const [name, setName] = useState('')
+  const [formData, setFormData] = useState({ title: '' })
 
   useEffect(() => {
     async function fetchGenre() {
       if (id) {
         try {
           const genre = await getGenre(parseInt(id))
-          setName(genre.name)
+          setFormData({ title: genre.title })
         } catch (error) {
           console.error('Failed to fetch genre:', error)
         }
@@ -25,7 +25,7 @@ export default function GenreEdit() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
 
-    const payload = { name }
+    const payload = { title: formData.title }
 
     try {
       await updateGenre(parseInt(id!), payload)
@@ -44,8 +44,8 @@ export default function GenreEdit() {
           <input 
             type='text' 
             required 
-            value={name}
-            onChange={e => setName(e.target.value)}
+            value={formData.title}
+            onChange={e => setFormData({...formData, title: e.target.value})}
           />
         </div>
         <div className='text-center'>

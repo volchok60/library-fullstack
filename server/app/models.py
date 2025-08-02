@@ -108,7 +108,7 @@ class AuthorsPublic(SQLModel):
 
 # Book model definitions
 class BookBase(SQLModel):
-    title: str = Field(max_length=255)
+    title: str = Field(unique=True, index=True, max_length=255)
     summary: str | None = Field(default=None, max_length=1000)
     imprint: str | None = Field(default=None, max_length=255)
     due_back: date | None = Field(default=None)
