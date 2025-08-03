@@ -100,3 +100,16 @@ def update_author(
     db_author = crud.update_author(session=session, db_author=db_author, author_in=author_in)
     return db_author
 
+@router.delete("/{id}")
+def delete_author(
+    session: SessionDep, id: int
+) -> Message:
+    """
+    Delete an author.
+    """
+    author = session.get(Author, id)
+    if not author:
+        raise HTTPException(status_code=404, detail="Author not found")
+    session.delete(author)
+    session.commit()
+    return Message(message="Author deleted successfully")
