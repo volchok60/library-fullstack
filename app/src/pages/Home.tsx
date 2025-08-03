@@ -15,18 +15,17 @@ export default function Home() {
     async function fetchCounts() {
       try {
          
-        const [books, availableBooks, authors, genres] = await Promise.all([
+        const [bc, abc, ac, gc] = await Promise.all([
           booksCount(),
           availableBooksCount(),
           authorsCount(),
           genresCount()
         ])
-        console.log('genres count: ', genres)
         setCounts({
-          books: parseInt(books || '0'),
-          availableBooks: parseInt(availableBooks || '0'),
-          authors: parseInt(authors || '0'),
-          genres: parseInt(genres || '0')
+          books: parseInt(bc || '0'),
+          availableBooks: parseInt(abc || '0'),
+          authors: parseInt(ac || '0'),
+          genres: parseInt(gc || '0')
         })
       } catch (error) {
         console.error('Failed to fetch counts:', error)

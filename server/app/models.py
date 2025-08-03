@@ -143,8 +143,6 @@ class Book(BookBase, table=True):
 
 class BookPublic(BookBase):
     id: int
-    author_id: int
-    genre_id: int
 
 class BooksPublic(SQLModel):
     books: list[BookPublic]

@@ -21,6 +21,7 @@ export async function booksCount() {
     console.log('status:', resp.status, 'statusText:', resp.statusText)
     throw new Error('Failed to fetch books count')
   }
+  console.log('resp:', resp)
   return resp.headers.get('x-result-count')
 }
 

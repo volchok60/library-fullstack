@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getBook, getAuthors, getGenres, updateBook } from '../lib/api'
+import { getBook, getAuthors, getGenres, updateBook, getAuthor, getGenre } from '../lib/api'
 import Author from '../components/Author'
 import Genre from '../components/Genre'
 import BookStatus from '../components/BookStatus'
@@ -9,21 +9,34 @@ export default function BookEdit() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [book, setBook] = useState<any>(null)
-  const [authors, setAuthors] = useState([])
-  const [genres, setGenres] = useState([])
+  const [author, setAuthor] = useState<any>(null)
+  const [genre, setGenre] = useState<any>(null)
+  const [authors, setAuthors] = useState(null)
+  const [genres, setGenres] = useState(null)
 
   useEffect(() => {
     async function fetchData() {
       if (id) {
         try {
-          const [bookData, authorsData, genresData] = await Promise.all([
+          const [bookData, {authors: authorsData, count}, {genres: genresData, count2}] = await Promise.all([
             getBook(parseInt(id)),
             getAuthors(),
             getGenres()
           ])
+          console.log('Fetched book:', bookData)
+          console.log('Authors:', authorsData)
+          console.log('Genres:', genresData)
           setBook(bookData)
           setAuthors(authorsData)
           setGenres(genresData)
+          const [a, g] = await Promise.all([
+            getAuthor(bookData.author_id),
+            getGenre(bookData.genre_id)
+          ])
+          setAuthor(a)
+          setGenre(g)
+          console.log('Fetched Author:', a)
+          console.log('Fetched Genre:', g)
         } catch (error) {
           console.error('Failed to fetch data:', error)
         }
@@ -31,7 +44,7 @@ export default function BookEdit() {
     }
 
     fetchData()
-  }, [id])
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -60,7 +73,7 @@ export default function BookEdit() {
     }
   }
 
-  if (!book) return <div>Loading...</div>
+  if (!book || !author || !genre || !authors || !genres) return <div>Loading Book details...</div>
 
   const dueDate = book.due_back?.split('T')[0]
 
@@ -72,8 +85,8 @@ export default function BookEdit() {
           <label className='sm:text-end'>Title:</label>
           <input type="text" name="title" required defaultValue={book.title} />
           
-          <Author authors={authors} selectedId={book.author.id} />
-          <Genre genres={genres} selectedId={book.genre.id} />
+          <Author authors={authors} selectedId={author.id} />
+          <Genre genres={genres} selectedId={genre.id} />
 
           <label className='sm:text-end'>Imprint:</label>
           <input type="text" name="imprint" required defaultValue={book.imprint} />

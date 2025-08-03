@@ -28,6 +28,7 @@ if settings.all_cors_origins:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+        expose_headers=["x-result-count"]  # <-- Add your headers here
     )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)

@@ -33,10 +33,7 @@ async def books_count(session: SessionDep) -> Response:
     response.headers["x-result-count"] = str(count)
     return response
 
-@router.get(
-    "/",
-    response_model=BooksPublic,
-)
+@router.get("/", response_model=BooksPublic)
 def read_books(session: SessionDep, skip: int = 0, limit: int = 100) -> BooksPublic:
     """
     Retrieve books.
@@ -44,11 +41,12 @@ def read_books(session: SessionDep, skip: int = 0, limit: int = 100) -> BooksPub
 
     count_statement = select(func.count()).select_from(Book)
     count = session.exec(count_statement).one()
-    # Fetch all books
+    
     statement = select(Book).offset(skip).limit(limit)
     books = session.exec(statement).all()
 
     return BooksPublic(books=books, count=count)
+
 
 @router.post("/", response_model=BookPublic)
 def create_book(*, session: SessionDep, book_in: BookCreate) -> BookPublic:
@@ -67,11 +65,32 @@ def create_book(*, session: SessionDep, book_in: BookCreate) -> BookPublic:
     return book
 
 @router.get("/{id}", response_model=BookPublic)
-def read_book_by_id(
-    id: int, session: SessionDep
-) -> Any:
+def read_book_by_id(id: int, session: SessionDep) -> BookPublic:
     """
     Get a specific book by id.
     """
     book = session.get(Book, id)
     return book
+
+@router.head("/available")
+async def available_books_count(session: SessionDep) -> Response:
+    count_statement = select(func.count()).select_from(Book).where(Book.status == 3)  # Status 3: Available
+    count = session.exec(count_statement).one()
+
+    response = Response(status_code=200)
+    response.headers["x-result-count"] = str(count)
+    return response
+
+@router.get("/available", response_model=BooksPublic)
+def read_available_books(session: SessionDep, skip: int = 0, limit: int = 100) -> BooksPublic:
+    """
+    Retrieve available books.
+    """
+
+    count_statement = select(func.count()).select_from(Book).where(Book.status == 3)  # Status 3: Available
+    count = session.exec(count_statement).one()
+    
+    statement = select(Book).offset(skip).limit(limit).where(Book.status == 3)  # Status 3: Available
+    books = session.exec(statement).all()
+
+    return BooksPublic(books=books, count=count)

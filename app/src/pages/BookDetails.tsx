@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getBook } from '../lib/api'
+import { getAuthor, getBook } from '../lib/api'
 import DeleteBook from '../components/DeleteBook'
 import FormattedDate from '../components/FormattedDate'
 import { getBookStatuses } from '../lib/utils'
@@ -8,25 +8,27 @@ import { getBookStatuses } from '../lib/utils'
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>()
   const [book, setBook] = useState<any>(null)
+  const [author, setAuthor] = useState<any>(null)
 
   useEffect(() => {
     async function fetchBook() {
       if (id) {
         try {
-          const data = await getBook(parseInt(id))
-          setBook(data)
+          const b = await getBook(parseInt(id))
+          setBook(b)
+          const a = await getAuthor(b.author_id)
+          setAuthor(a)
         } catch (error) {
-          console.error('Failed to fetch book:', error)
+          console.error('Failed to fetch book details:', error)
         }
       }
     }
 
     fetchBook()
-  }, [id])
+  }, [])
 
-  if (!book) return <div>Loading...</div>
-
-  const author = book.author
+  if (!book || !author) return <div>Loading Book details...</div>
+  
   const dueDate = book.due_back?.split('T')[0]
   const statuses = getBookStatuses()
 
@@ -49,7 +51,7 @@ export default function BookDetails() {
         <span>Status: </span>
         {statuses[book.status]}
       </p>
-      {book.status !== 5 &&
+      {book.due_back &&
         <p>
           <span>Due Date: </span>
           <FormattedDate dateString={dueDate} />
