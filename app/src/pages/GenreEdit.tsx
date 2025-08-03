@@ -20,7 +20,7 @@ export default function GenreEdit() {
     }
 
     fetchGenre()
-  }, [id])
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
