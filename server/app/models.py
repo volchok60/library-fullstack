@@ -109,7 +109,7 @@ class AuthorsPublic(SQLModel):
 # Book model definitions
 class BookBase(SQLModel):
     title: str = Field(unique=True, index=True, max_length=255)
-    summary: str | None = Field(default=None, max_length=1000)
+    summary: str | None = Field(default=None, max_length=2000)
     imprint: str | None = Field(default=None, max_length=255)
     due_back: date | None = Field(default=None)
     status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
@@ -131,7 +131,7 @@ class BookUpdate(BookBase):
     due_back: date | None = Field(default=None)
     status: int = Field(default=5)  # 1: Maintenance, 2: On loan, 3: Available, 4: Reserved, 5: In Library
     isbn: ISBN | None = Field(default=None, max_length=13)
-    summary: str | None = Field(default=None, max_length=1000)
+    summary: str | None = Field(default=None, max_length=2000)
     updated_at: datetime = Field(default_factory=datetime.now)
 
 class Book(BookBase, table=True):
