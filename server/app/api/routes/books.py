@@ -116,3 +116,16 @@ def update_book(
     db_book = crud.update_book(session=session, db_book=db_book, book_in=book_in)
     return db_book
 
+@router.delete("/{id}")
+def delete_book(
+    session: SessionDep, id: int
+) -> Message:
+    """
+    Delete a book.
+    """
+    book = session.get(Book, id)
+    if not book:
+        raise HTTPException(status_code=404, detail="Book not found")
+    session.delete(book)
+    session.commit()
+    return Message(message="Book deleted successfully")
