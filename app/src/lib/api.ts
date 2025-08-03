@@ -212,11 +212,11 @@ export async function createGenre(payload: {
 }
 
 export async function updateAuthor(id: number, payload: {
-  firstName: string;
-  familyName: string;
-  birthDate: Date;
-  deathDate: Date | null;
-  lifeSpan: string;
+  first_name: string;
+  family_name: string;
+  birth_date: Date;
+  death_date: Date | null;
+  life_span: string;
 }) {
   const response = await fetch(`${baseUrl}/api/v1/authors/${id}`, {
     method: 'PUT',
@@ -231,11 +231,11 @@ export async function updateAuthor(id: number, payload: {
 
 export async function updateBook(id: number, payload: {
   title: string;
-  authorId: number;
-  genreId: number;
+  author_id: number;
+  genre_id: number;
   summary: string;
   imprint: string;
-  dueBack: Date | null;
+  due_back: Date | null;
   status: number;
   isbn: string;
 }) {

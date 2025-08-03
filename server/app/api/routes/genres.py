@@ -72,11 +72,8 @@ def read_genre_by_id(
     genre = session.get(Genre, genre_id)
     return genre
 
-@router.put(
-    "/{id}",
-    response_model=GenrePublic,
-)
-def update_user(
+@router.put("/{id}", response_model=GenrePublic)
+def update_genre(
     *,
     session: SessionDep,
     id: int,

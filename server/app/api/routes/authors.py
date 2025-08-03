@@ -78,3 +78,25 @@ def read_author_by_id(
     """
     author = session.get(Author, id)
     return author
+
+@router.put("/{id}", response_model=AuthorPublic)
+def update_author(
+    *,
+    session: SessionDep,
+    id: int,
+    author_in: AuthorUpdate,
+) -> Any:
+    """
+    Update an author.
+    """
+
+    db_author = session.get(Author, id)
+    if not db_author:
+        raise HTTPException(
+            status_code=404,
+            detail="The author with this id does not exist in the system",
+        )
+
+    db_author = crud.update_author(session=session, db_author=db_author, author_in=author_in)
+    return db_author
+

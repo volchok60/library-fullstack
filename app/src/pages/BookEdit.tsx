@@ -56,11 +56,11 @@ export default function BookEdit() {
 
     const payload = {
       title: formData.get('title') as string,
-      authorId: parseInt(formData.get('author_id') as string),
-      genreId: parseInt(formData.get('genre_id') as string),
+      author_id: parseInt(formData.get('author_id') as string),
+      genre_id: parseInt(formData.get('genre_id') as string),
       summary: formData.get('summary') as string,
       imprint: formData.get('imprint') as string,
-      dueBack: dueDate,
+      due_back: dueDate,
       status: parseInt(formData.get('status') as string),
       isbn: formData.get('isbn') as string
     }
