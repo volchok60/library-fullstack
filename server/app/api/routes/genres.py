@@ -71,3 +71,27 @@ def read_genre_by_id(
     """
     genre = session.get(Genre, genre_id)
     return genre
+
+@router.put(
+    "/{id}",
+    response_model=GenrePublic,
+)
+def update_user(
+    *,
+    session: SessionDep,
+    id: int,
+    genre_in: GenreUpdate,
+) -> Any:
+    """
+    Update a genre.
+    """
+
+    db_genre = session.get(Genre, id)
+    if not db_genre:
+        raise HTTPException(
+            status_code=404,
+            detail="The genre with this id does not exist in the system",
+        )
+
+    db_genre = crud.update_genre(session=session, db_genre=db_genre, genre_in=genre_in)
+    return db_genre
