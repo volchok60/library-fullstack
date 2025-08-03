@@ -94,3 +94,25 @@ def read_available_books(session: SessionDep, skip: int = 0, limit: int = 100) -
     books = session.exec(statement).all()
 
     return BooksPublic(books=books, count=count)
+
+@router.put("/{id}", response_model=BookPublic)
+def update_book(
+    *,
+    session: SessionDep,
+    id: int,
+    book_in: BookUpdate,
+) -> Any:
+    """
+    Update a book.
+    """
+
+    db_book = session.get(Book, id)
+    if not db_book:
+        raise HTTPException(
+            status_code=404,
+            detail="The book with this id does not exist in the system",
+        )
+
+    db_book = crud.update_book(session=session, db_book=db_book, book_in=book_in)
+    return db_book
+

@@ -4,7 +4,7 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import AuthorUpdate, GenreUpdate, User, UserCreate, UserUpdate, Genre, GenreCreate, Author, AuthorCreate, Book, BookCreate
+from app.models import AuthorUpdate, BookUpdate, GenreUpdate, User, UserCreate, UserUpdate, Genre, GenreCreate, Author, AuthorCreate, Book, BookCreate
 
 # CRUD operations for User
 def create_user(*, session: Session, user_create: UserCreate) -> User:
@@ -95,4 +95,10 @@ def create_book(*, session: Session, book_in: BookCreate) -> Book:
     session.refresh(book)
     return book
 
+def update_book(*, session: Session, db_book: Book, book_in: BookUpdate) -> Any:
+    db_book.sqlmodel_update(book_in)
+    session.add(db_book)
+    session.commit()
+    session.refresh(db_book)
+    return db_book
 

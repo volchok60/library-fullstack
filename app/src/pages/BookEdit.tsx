@@ -23,9 +23,6 @@ export default function BookEdit() {
             getAuthors(),
             getGenres()
           ])
-          console.log('Fetched book:', bookData)
-          console.log('Authors:', authorsData)
-          console.log('Genres:', genresData)
           setBook(bookData)
           setAuthors(authorsData)
           setGenres(genresData)
@@ -35,8 +32,6 @@ export default function BookEdit() {
           ])
           setAuthor(a)
           setGenre(g)
-          console.log('Fetched Author:', a)
-          console.log('Fetched Genre:', g)
         } catch (error) {
           console.error('Failed to fetch data:', error)
         }
