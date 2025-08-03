@@ -92,3 +92,17 @@ def update_genre(
 
     db_genre = crud.update_genre(session=session, db_genre=db_genre, genre_in=genre_in)
     return db_genre
+
+@router.delete("/{id}")
+def delete_user(
+    session: SessionDep, id: int
+) -> Message:
+    """
+    Delete a genre.
+    """
+    genre = session.get(Genre, id)
+    if not genre:
+        raise HTTPException(status_code=404, detail="Genre not found")
+    session.delete(genre)
+    session.commit()
+    return Message(message="Genre deleted successfully")
