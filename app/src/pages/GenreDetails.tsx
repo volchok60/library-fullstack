@@ -1,28 +1,19 @@
-import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getGenre } from '../lib/api'
+import { GenreType, getGenre } from '../lib/api'
 import DeleteGenre from '../components/DeleteGenre'
+import { useQuery } from '@tanstack/react-query'
 
 export default function GenreDetails() {
   const { id } = useParams<{ id: string }>()
-  const [genre, setGenre] = useState<any>(null)
+  const genreId = parseInt(id!)
 
-  useEffect(() => {
-    async function fetchGenre() {
-      if (id) {
-        try {
-          const data = await getGenre(parseInt(id))
-          setGenre(data)
-        } catch (error) {
-          console.error('Failed to fetch genre:', error)
-        }
-      }
-    }
+  const {isPending, error, data: genre, isFetching } = useQuery<GenreType, Error>({
+    queryKey: ['genre', genreId],
+    queryFn: () => getGenre(genreId)
+  });
 
-    fetchGenre()
-  }, [id])
-
-  if (!genre) return <div>Loading...</div>
+  if (isPending) return <div>Loading...</div>
+  if (error) return <div>Error fetching genre: {error.message}</div>;
 
   return (
     <>

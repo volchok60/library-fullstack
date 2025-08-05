@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { booksCount, availableBooksCount, authorsCount, genresCount } from '../lib/api'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Home() {
   const [counts, setCounts] = useState({
@@ -9,33 +10,37 @@ export default function Home() {
     authors: -1,
     genres: -1
   })
-  const [loading, setLoading] = useState(true)
+
+  const {isPending: bcLoading, error: bcError, data: bc, isFetching } = useQuery<string | null, Error>({
+    queryKey: ['books-count'],
+    queryFn: () => booksCount()
+  });
+
+  const {isPending: abcLoading, error: abcError, data: abc } = useQuery<string | null, Error>({
+    queryKey: ['available-books-count'],
+    queryFn: () => availableBooksCount()
+  });
+
+  const {isPending: acLoading, error: acError, data: ac } = useQuery<string | null, Error>({
+    queryKey: ['authors-count'],
+    queryFn: () => authorsCount()
+  });
+
+  const {isPending: gcLoading, error: gcError, data: gc } = useQuery<string | null, Error>({
+    queryKey: ['genres-count'],
+    queryFn: () => genresCount()
+  });
 
   useEffect(() => {
-    async function fetchCounts() {
-      try {
-         
-        const [bc, abc, ac, gc] = await Promise.all([
-          booksCount(),
-          availableBooksCount(),
-          authorsCount(),
-          genresCount()
-        ])
+    if (bc && abc && ac && gc) {
         setCounts({
           books: parseInt(bc || '0'),
           availableBooks: parseInt(abc || '0'),
           authors: parseInt(ac || '0'),
           genres: parseInt(gc || '0')
         })
-      } catch (error) {
-        console.error('Failed to fetch counts:', error)
-      } finally {
-        setLoading(false)
-      }
     }
-
-    fetchCounts()
-  }, [])
+  }, [bc, abc, ac, gc])  
 
   const stats = [
     {
@@ -71,6 +76,11 @@ export default function Home() {
       description: 'Ready to borrow'
     }
   ]
+
+  if (bcError) return <div>Error fetching books count: {bcError.message}</div>;
+  if (abcError) return <div>Error fetching available books count: {abcError.message}</div>;
+  if (acError) return <div>Error fetching authors count: {acError.message}</div>;
+  if (gcError) return <div>Error fetching genres count: {gcError.message}</div>;
   
   return (
     <div className="bg-gradient-to-br from-slate-50 to-blue-50 py-12 px-4">
@@ -106,7 +116,7 @@ export default function Home() {
                     <span className="text-3xl">{stat.icon}</span>
                     <div className="text-right">
                       <div className="text-3xl font-bold">
-                        {loading ? (
+                        {(bcLoading || acLoading || gcLoading || abcLoading) ? (
                           <div className="animate-pulse bg-white bg-opacity-30 rounded h-8 w-12"></div>
                         ) : (
                           stat.count

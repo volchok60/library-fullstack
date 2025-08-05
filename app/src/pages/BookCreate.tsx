@@ -1,15 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getAuthors, getGenres, createBook } from '../lib/api'
 import BookStatus from '../components/BookStatus'
-import { AuthorType, GenreType } from '../lib/utils'
+import { AuthorType, GenreType } from '../lib/api'
+import { useQuery } from '@tanstack/react-query'
 
 export default function BookCreate() {
   const navigate = useNavigate()
-  const [authors, setAuthors] = useState([])
-  const [genres, setGenres] = useState([])
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     title: '',
     authorId: '',
@@ -21,27 +18,15 @@ export default function BookCreate() {
     isbn: ''
   })
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setLoading(true);
-        const [{authors, count: authorsCount}, {genres, count: genresCount}] = await Promise.all([
-          getAuthors(),
-          getGenres()
-        ])
-        console.log('Fetched authors:', authors, 'Count:', authorsCount)
-        setAuthors(authors)
-        setGenres(genres)
-      } catch (err: Error | any) {
-        setError(err);
-        console.error('Failed to fetch data:', err)
-      } finally {
-        setLoading(false);
-      }
-    }
+  const {isPending: authorsloading, error: authorsError, data: authorsData } = useQuery<{ authors: AuthorType[], count: number }, Error>({
+    queryKey: ['authors'],
+    queryFn: () => getAuthors()
+  });
 
-    fetchData()
-  }, []) // Empty dependency array ensures it runs only once on mount
+  const {isPending: genresLoading, error: genresError, data: genresData} = useQuery<{ genres: GenreType[], count: number }, Error>({
+    queryKey: ['genres'],
+    queryFn: () => getGenres()
+  });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -69,7 +54,10 @@ export default function BookCreate() {
     }
   }
 
-  if (loading) {
+  if (authorsError) return <div>Error fetching authors: {authorsError.message}</div>;
+  if (genresError) return <div>Error fetching genres: {genresError.message}</div>;
+
+  if (authorsloading || genresLoading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,7 +77,8 @@ export default function BookCreate() {
     )
   }
 
-  if (error) return <div>Error: {error}</div>;
+  const authors = authorsData ? authorsData.authors : []
+  const genres = genresData ? genresData.genres : []
 
   return (
     <div>

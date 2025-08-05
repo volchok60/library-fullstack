@@ -1,33 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getBooks } from '../lib/api'
 import { BookType } from '../components/Book'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Books() {
-  const [books, setBooks] = useState<BookType[]>([])
-  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => {
-    async function fetchBooks() {
-      try {
-        const {books, count} = await getBooks()
-        setBooks(books)
-      } catch (error) {
-        console.error('Failed to fetch books:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const {isPending, error, data, isFetching } = useQuery<{ books: BookType[], count: number }, Error>({
+    queryKey: ['books'],
+    queryFn: () => getBooks()
+  });
 
-    fetchBooks()
-  }, [])
+  if (error) return <div>Error fetching books: {error.message}</div>;
 
+  const books = data ? data.books : []
   const filteredBooks = books.filter(book =>
     book.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
-  if (loading) {
+  if (isPending) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,26 +38,6 @@ export default function Books() {
       </div>
     )
   }
-
-
-{/*}  return (
-    <>
-      <div className="flex justify-between pt-2">
-        <h1 className="ml-2">Book List</h1>
-        <Link to="/books/create" className="rounded-md bg-cyan-500 text-white hover:bg-blue-500 mr-2 p-2">New Book</Link>
-      </div>
-      <div className="grid justify-items-center">
-        <ul>
-          {books && books.map((book: BookType) => (
-            <li key={book.id}>
-              <Link to={`/books/${book.id}`} className="hover:text-blue-500">{book.title}</Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </>
-  ) */}
-
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">

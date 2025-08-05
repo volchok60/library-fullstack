@@ -1,35 +1,32 @@
-import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getAuthor, getBook } from '../lib/api'
+import { AuthorType, BookType, getAuthor, getBook } from '../lib/api'
 import DeleteBook from '../components/DeleteBook'
 import FormattedDate from '../components/FormattedDate'
-import { getBookStatuses } from '../lib/utils'
+import { getBookStatuses } from '../lib/api'
+import { useQuery } from '@tanstack/react-query'
 
 export default function BookDetails() {
   const { id } = useParams<{ id: string }>()
-  const [book, setBook] = useState<any>(null)
-  const [author, setAuthor] = useState<any>(null)
+  const bookId = parseInt(id!)
 
-  useEffect(() => {
-    async function fetchBook() {
-      if (id) {
-        try {
-          const b = await getBook(parseInt(id))
-          setBook(b)
-          const a = await getAuthor(b.author_id)
-          setAuthor(a)
-        } catch (error) {
-          console.error('Failed to fetch book details:', error)
-        }
-      }
-    }
+  const {isPending: bookLoading, error: bookError, data: book, isFetching } = useQuery<BookType, Error>({
+    queryKey: ['book', bookId],
+    queryFn: () => getBook(bookId)
+  });
 
-    fetchBook()
-  }, [])
+  const authorId = book?.author_id
+  const {isPending: authorloading, error: authorError, data: author } = useQuery<AuthorType, Error>({
+    queryKey: ['author', authorId],
+    queryFn: () => getAuthor(authorId!),
+    enabled: !!authorId, // Only fetch author if book is loaded
+  });
 
-  if (!book || !author) return <div>Loading Book details...</div>
+  if (bookLoading || authorloading) return <div>Loading Book details...</div>
+
+  if (bookError) return <div>Error fetching book: {bookError.message}</div>;
+  if (authorError) return <div>Error fetching author: {authorError.message}</div>;
   
-  const dueDate = book.due_back?.split('T')[0]
+  const dueDate = book.due_back ? book.due_back.toString() : ''
   const statuses = getBookStatuses()
 
   return (

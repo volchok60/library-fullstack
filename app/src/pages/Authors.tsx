@@ -1,33 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
 import { getAuthors } from '../lib/api'
 import { AuthorType } from '../components/Author'
 
 export default function Authors() {
-  const [authors, setAuthors] = useState<AuthorType[]>([])
-  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => {
-    async function fetchAuthors() {
-      try {
-        const {authors, count} = await getAuthors()
-        setAuthors(authors)
-      } catch (error) {
-        console.error('Failed to fetch authors:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const {isPending, error, data, isFetching } = useQuery<{ authors: AuthorType[], count: number }, Error>({
+    queryKey: ['authors'],
+    queryFn: () => getAuthors()
+  });
 
-    fetchAuthors()
-  }, [])
+  if (error) return <div>Error fetching authors: {error.message}</div>;
 
-  const filteredAuthors = authors.filter(author =>
-    `${author.first_name} ${author.family_name}`.toLowerCase().includes(searchTerm.toLowerCase())
-  )
-
-  if (loading) {
+  if (isPending) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -46,6 +33,11 @@ export default function Authors() {
       </div>
     )
   }
+
+  const authors = data ? data.authors : []
+  const filteredAuthors = authors.filter(author =>
+    `${author.first_name} ${author.family_name}`.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-8">

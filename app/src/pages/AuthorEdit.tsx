@@ -1,9 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getAuthor, updateAuthor } from '../lib/api'
+import { AuthorType, getAuthor, updateAuthor } from '../lib/api'
+import { useQuery } from '@tanstack/react-query'
 
 export default function AuthorEdit() {
   const { id } = useParams<{ id: string }>()
+  const authorId = parseInt(id!)
+
   const navigate = useNavigate()
   const [formData, setFormData] = useState({
     firstName: '',
@@ -13,26 +16,22 @@ export default function AuthorEdit() {
     lifeSpan: ''
   })
 
+  const {isPending, error, data: author, isFetching } = useQuery<AuthorType, Error>({
+    queryKey: ['author', authorId],
+    queryFn: () => getAuthor(authorId)
+  });
+  
   useEffect(() => {
-    async function fetchAuthor() {
-      if (id) {
-        try {
-          const author = await getAuthor(parseInt(id))
-          setFormData({
-            firstName: author.first_name,
-            familyName: author.family_name,
-            birthDate: author.birth_date?.split('T')[0] || '',
-            deathDate: author.death_date?.split('T')[0] || '',
-            lifeSpan: author.life_span
-          })
-        } catch (error) {
-          console.error('Failed to fetch author:', error)
-        }
-      }
+    if (author) {
+      setFormData({
+        firstName: author.first_name,
+        familyName: author.family_name,
+        birthDate: author.birth_date.toString(),
+        deathDate: author.death_date?.toString() || '',
+        lifeSpan: author.life_span
+      })
     }
-
-    fetchAuthor()
-  }, [])
+  }, [author])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -52,6 +51,9 @@ export default function AuthorEdit() {
       console.error('Failed to update author:', error)
     }
   }
+
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>Error fetching author: {error.message}</div>;
 
   return (
     <div>

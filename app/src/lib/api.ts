@@ -1,5 +1,44 @@
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
+export interface GenreType {
+  id: number
+  title: string
+}
+
+export interface AuthorType {
+  id: number
+  first_name: string
+  family_name: string
+  birth_date: Date
+  death_date: Date | null
+  life_span: string
+}
+
+export interface BookType {
+  id: number
+  title: string
+  author_id: number
+  genre_id: number
+  summary: string
+  imprint: string
+  due_back: Date | null
+  status: number
+  isbn: string
+}
+
+enum BookStatus {
+  NotAvailable,
+  OnOrder,      
+  InTransit,    
+  OnHold,       
+  OnLoan,       
+  InLibrary     
+}
+
+export function getBookStatuses() {
+  return Object.values(BookStatus).filter((value) => typeof value === "string");
+}
+
 export async function authorsCount() {
   const resp = await fetch(`${baseUrl}/api/v1/authors`, {
     method: "HEAD"
@@ -21,7 +60,6 @@ export async function booksCount() {
     console.log('status:', resp.status, 'statusText:', resp.statusText)
     throw new Error('Failed to fetch books count')
   }
-  console.log('resp:', resp)
   return resp.headers.get('x-result-count')
 }
 
@@ -49,7 +87,7 @@ export async function genresCount() {
   return resp.headers.get('x-result-count')
 }
 
-export async function getAuthors() {
+export async function getAuthors(): Promise<{ authors: AuthorType[], count: number }> {
   const resp = await fetch(`${baseUrl}/api/v1/authors`)
 
   if (!resp.ok) {
@@ -62,7 +100,7 @@ export async function getAuthors() {
   return authors
 }
 
-export async function getGenres() {
+export async function getGenres(): Promise<{ genres: GenreType[], count: number }> {
   const resp = await fetch(`${baseUrl}/api/v1/genres`)
 
   if (!resp.ok) {
@@ -75,7 +113,7 @@ export async function getGenres() {
   return genres
 }
 
-export async function getBooks() {
+export async function getBooks(): Promise<{ books: BookType[], count: number }> {
   const resp = await fetch(`${baseUrl}/api/v1/books`)
 
   if (!resp.ok) {
@@ -88,7 +126,7 @@ export async function getBooks() {
   return books
 }
 
-export async function getAvailableBooks() {
+export async function getAvailableBooks(): Promise<{ books: BookType[], count: number }> {
   const resp = await fetch(`${baseUrl}/api/v1/books/available`)
 
   if (!resp.ok) {
@@ -101,7 +139,7 @@ export async function getAvailableBooks() {
   return availableBooks
 }
 
-export async function getAuthor(id: number) {
+export async function getAuthor(id: number): Promise<AuthorType> {
   const resp = await fetch(`${baseUrl}/api/v1/authors/${id}`)
 
   if (!resp.ok) {
@@ -114,7 +152,7 @@ export async function getAuthor(id: number) {
   return author
 }
 
-export async function getBook(id: number) {
+export async function getBook(id: number): Promise<BookType> {
   const resp = await fetch(`${baseUrl}/api/v1/books/${id}`)
 
   if (!resp.ok) {
@@ -127,7 +165,7 @@ export async function getBook(id: number) {
   return book
 }
 
-export async function getGenre(id: number) {
+export async function getGenre(id: number): Promise<GenreType> {
   const resp = await fetch(`${baseUrl}/api/v1/genres/${id}`)
 
   if (!resp.ok) {
@@ -164,7 +202,7 @@ export async function createAuthor(payload: {
   birth_date: Date;
   death_date: Date | null;
   life_span: string;
-}) {
+}): Promise<AuthorType> {
   const response = await fetch(`${baseUrl}/api/v1/authors`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -185,7 +223,7 @@ export async function createBook(payload: {
   due_back: Date | null;
   status: number;
   isbn: string;
-}) {
+}): Promise<BookType> {
   const response = await fetch(`${baseUrl}/api/v1/books`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -199,7 +237,7 @@ export async function createBook(payload: {
 
 export async function createGenre(payload: {
   title: string;
-}) {
+}): Promise<GenreType> {
   const response = await fetch(`${baseUrl}/api/v1/genres`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -217,7 +255,7 @@ export async function updateAuthor(id: number, payload: {
   birth_date: Date;
   death_date: Date | null;
   life_span: string;
-}) {
+}): Promise<AuthorType> {
   const response = await fetch(`${baseUrl}/api/v1/authors/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -238,7 +276,7 @@ export async function updateBook(id: number, payload: {
   due_back: Date | null;
   status: number;
   isbn: string;
-}) {
+}): Promise<BookType> {
   const response = await fetch(`${baseUrl}/api/v1/books/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
@@ -252,7 +290,7 @@ export async function updateBook(id: number, payload: {
 
 export async function updateGenre(id: number, payload: {
   title: string;
-}) {
+}): Promise<GenreType> {
   const response = await fetch(`${baseUrl}/api/v1/genres/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },

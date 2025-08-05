@@ -1,45 +1,43 @@
-import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getBook, getAuthors, getGenres, updateBook, getAuthor, getGenre } from '../lib/api'
+import { getBook, getAuthors, getGenres, updateBook, getAuthor, getGenre, AuthorType, GenreType, BookType } from '../lib/api'
 import Author from '../components/Author'
 import Genre from '../components/Genre'
 import BookStatus from '../components/BookStatus'
+import { useQuery } from '@tanstack/react-query'
 
 export default function BookEdit() {
   const { id } = useParams<{ id: string }>()
+  const bookId = parseInt(id!)
   const navigate = useNavigate()
-  const [book, setBook] = useState<any>(null)
-  const [author, setAuthor] = useState<any>(null)
-  const [genre, setGenre] = useState<any>(null)
-  const [authors, setAuthors] = useState(null)
-  const [genres, setGenres] = useState(null)
 
-  useEffect(() => {
-    async function fetchData() {
-      if (id) {
-        try {
-          const [bookData, {authors: authorsData, count}, {genres: genresData, count2}] = await Promise.all([
-            getBook(parseInt(id)),
-            getAuthors(),
-            getGenres()
-          ])
-          setBook(bookData)
-          setAuthors(authorsData)
-          setGenres(genresData)
-          const [a, g] = await Promise.all([
-            getAuthor(bookData.author_id),
-            getGenre(bookData.genre_id)
-          ])
-          setAuthor(a)
-          setGenre(g)
-        } catch (error) {
-          console.error('Failed to fetch data:', error)
-        }
-      }
-    }
+  const {isPending: bookLoading, error: bookError, data: book, isFetching } = useQuery<BookType, Error>({
+    queryKey: ['book', bookId],
+    queryFn: () => getBook(bookId)
+  });
 
-    fetchData()
-  }, [])
+  const authorId = book?.author_id
+  const {isPending: authorloading, error: authorError, data: author } = useQuery<AuthorType, Error>({
+    queryKey: ['author', authorId],
+    queryFn: () => getAuthor(authorId!),
+    enabled: !!authorId, // Only fetch author if book is loaded
+  });
+
+  const genreId = book?.genre_id
+  const {isPending: genreLoading, error: genreError, data: genre } = useQuery<GenreType, Error>({
+    queryKey: ['genre', genreId],
+    queryFn: () => getGenre(genreId!),
+    enabled: !!genreId, // Only fetch genre if book is loaded
+  });
+
+  const {isPending: authorsloading, error: authorsError, data: authorsData } = useQuery<{ authors: AuthorType[], count: number }, Error>({
+    queryKey: ['authors'],
+    queryFn: () => getAuthors()
+  });
+
+  const {isPending: genresLoading, error: genresError, data: genresData} = useQuery<{ genres: GenreType[], count: number }, Error>({
+    queryKey: ['genres'],
+    queryFn: () => getGenres()
+  });
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -68,9 +66,17 @@ export default function BookEdit() {
     }
   }
 
-  if (!book || !author || !genre || !authors || !genres) return <div>Loading Book details...</div>
+  if (bookLoading || authorloading || genreLoading || authorsloading || genresLoading) return <div>Loading Book details...</div>
 
-  const dueDate = book.due_back?.split('T')[0]
+  if (bookError) return <div>Error fetching book: {bookError.message}</div>;
+  if (authorError) return <div>Error fetching author: {authorError.message}</div>;
+  if (genreError) return <div>Error fetching genre: {genreError.message}</div>;
+  if (authorsError) return <div>Error fetching authors: {authorsError.message}</div>;
+  if (genresError) return <div>Error fetching genres: {genresError.message}</div>;
+
+  const dueDate = book.due_back?.toString()
+  const authors = authorsData ? authorsData.authors : []
+  const genres = genresData ? genresData.genres : []
 
   return (
     <div>

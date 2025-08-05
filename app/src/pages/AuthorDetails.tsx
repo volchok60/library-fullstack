@@ -1,32 +1,23 @@
-import { useState, useEffect } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getAuthor } from '../lib/api'
+import { AuthorType, getAuthor } from '../lib/api'
 import FormattedDate from '../components/FormattedDate'
 import DeleteAuthor from '../components/DeleteAuthor'
+import { useQuery } from '@tanstack/react-query'
 
 export default function AuthorDetails() {
   const { id } = useParams<{ id: string }>()
-  const [author, setAuthor] = useState<any>(null)
+  const authorId = parseInt(id!)
 
-  useEffect(() => {
-    async function fetchAuthor() {
-      if (id) {
-        try {
-          const data = await getAuthor(parseInt(id))
-          setAuthor(data)
-        } catch (error) {
-          console.error('Failed to fetch author:', error)
-        }
-      }
-    }
+  const {isPending, error, data: author, isFetching } = useQuery<AuthorType, Error>({
+    queryKey: ['author', authorId],
+    queryFn: () => getAuthor(authorId)
+  });
 
-    fetchAuthor()
-  }, [id])
+  if (isPending) return <div>Loading...</div>;
+  if (error) return <div>Error fetching author: {error.message}</div>;
 
-  if (!author) return <div>Loading...</div>
-
-  const birthDate = author.birth_date?.split('T')[0]
-  const deathDate = author.death_date?.split("T")[0]
+  const birthDate = author.birth_date.toString()
+  const deathDate = author.death_date?.toString()
 
   return (
     <>

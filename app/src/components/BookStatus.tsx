@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getBookStatuses } from '../lib/utils';
+import { getBookStatuses } from '../lib/api';
 
 interface BookStatusProps {
   selectedId?: number

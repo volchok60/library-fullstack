@@ -1,31 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { getGenres } from '../lib/api'
 import { GenreType } from '../components/Genre'
+import { useQuery } from '@tanstack/react-query'
 
 export default function Genres() {
-  const [genres, setGenres] = useState<GenreType[]>([])
-  const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
 
-  useEffect(() => {
-    async function fetchGenres() {
-      try {
-        const {genres, count} = await getGenres()
-        setGenres(genres)
-      } catch (error) {
-        console.error('Failed to fetch genres:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const {isPending, error, data, isFetching } = useQuery<{ genres: GenreType[], count: number }, Error>({
+    queryKey: ['genres'],
+    queryFn: () => getGenres()
+  });
 
-    fetchGenres()
-  }, [])
-
-  const filteredGenres = genres.filter(genre =>
-    genre.title.toLowerCase().includes(searchTerm.toLowerCase())
-  )
+  if (error) return <div>Error fetching genres: {error.message}</div>;
 
   // Genre icons mapping for visual appeal
   const getGenreIcon = (genreName: string) => {
@@ -66,7 +53,7 @@ export default function Genres() {
     return colors[index % colors.length]
   }
 
-  if (loading) {
+  if (isPending) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -85,6 +72,11 @@ export default function Genres() {
       </div>
     )
   }
+
+  const genres = data ? data.genres : []
+  const filteredGenres = genres.filter(genre =>
+    genre.title.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-purple-50 py-8">
