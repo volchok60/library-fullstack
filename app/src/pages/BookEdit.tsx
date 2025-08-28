@@ -80,33 +80,37 @@ export default function BookEdit() {
 
   return (
     <div>
-      <h1 className='text-center m-2'>Update Book</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-3">
-          <label className='sm:text-end'>Title:</label>
-          <input type="text" name="title" required defaultValue={book.title} />
-          
-          <Author authors={authors} selectedId={author.id} />
-          <Genre genres={genres} selectedId={genre.id} />
-
-          <label className='sm:text-end'>Imprint:</label>
-          <input type="text" name="imprint" required defaultValue={book.imprint} />
-
-          <BookStatus selectedId={book.status} />
-
-          <label className='sm:text-end'>ISBN:</label>
-          <input type="text" name="isbn" required defaultValue={book.isbn} />
-          
-          <label className='sm:text-end'>Due Date:</label>
-          <input type="date" name="due_date" defaultValue={dueDate} />
-
-          <label className='sm:text-end'>Summary:</label>
-          <textarea name="summary" rows={10} cols={50} required defaultValue={book.summary} />
+      <h1 className='text-center m-2 font-bold p-4 text-lg'>Update Book</h1>
+      <form onSubmit={handleSubmit} className='p-4'>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Title</label>
+          <input type="text" name="title" required defaultValue={book.title}
+            className='self-start mb-2' maxLength={255} />
+        </div>          
+        <Author authors={authors} selectedId={author.id} />
+        <Genre genres={genres} selectedId={genre.id} />
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Imprint</label>
+          <input type="text" name="imprint" required defaultValue={book.imprint}
+            className='self-start mb-2' maxLength={255} />
         </div>
-        <div className='text-center'>
-          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 m-2 px-2'>
-            Update
-          </button>
+        <BookStatus selectedId={book.status} />
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>ISBN</label>
+          <input type="text" name="isbn" required defaultValue={book.isbn}
+            className='self-start mb-2' maxLength={13} />
+        </div>            
+        <div className='flex flex-col mb-2'>          
+          <label className='self-start font-semibold mb-1'>Due Date</label>
+          <input type="date" name="due_date" defaultValue={dueDate} className='self-start mb-2' />
+        </div>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Summary</label>
+          <textarea name="summary" rows={10} cols={50} required defaultValue={book.summary}
+            className='self-start mb-2 resize-none' maxLength={2000} />
+        </div>
+        <div className='text-center m-2'>
+          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 px-4 py-2'>Update</button>
         </div>
       </form>
     </div>

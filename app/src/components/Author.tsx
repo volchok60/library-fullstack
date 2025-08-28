@@ -15,9 +15,11 @@ export default function Author({ authors, selectedId}: AuthorProps) {
   const [authorId, setAuthorId] = useState(selectedId)
 
   return (
-    <>
-      <label className='sm:text-end'>Author:</label>
-      <select name='author_id' value={authorId} required onChange={e => setAuthorId(Number(e.target.value))}>
+    <div className='flex flex-col mb-2'>
+      <label className='self-start font-semibold mb-1'>Author</label>
+      <select name='author_id' value={authorId} required 
+        onChange={e => setAuthorId(Number(e.target.value))}
+        className='self-start mb-2 bg-white'>
         <option>----- select -----</option>
         {authors && authors.map((author: AuthorType) => (
           <option key={author.id} value={author.id}>
@@ -25,6 +27,6 @@ export default function Author({ authors, selectedId}: AuthorProps) {
           </option>
         ))}
       </select>
-    </>
+    </div>
   )
 }
