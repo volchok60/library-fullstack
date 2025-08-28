@@ -10,9 +10,11 @@ export default function BookStatus({selectedId}: BookStatusProps) {
   const [statusId, setStatusId] = useState(selectedId)
 
   return (
-    <>
-      <label className='sm:text-end'>Status:</label>
-      <select name='status' value={statusId} required onChange={e => setStatusId(Number(e.target.value))}>
+    <div className='flex flex-col mb-2'>
+      <label className='self-start font-semibold mb-1'>Status</label>
+      <select name='status' value={statusId} required 
+        onChange={e => setStatusId(Number(e.target.value))}
+        className='self-start mb-2 bg-white'>
         <option>----- select -----</option>
         {statuses.map((status, index) => (
           <option key={index} value={index}>
@@ -20,6 +22,6 @@ export default function BookStatus({selectedId}: BookStatusProps) {
           </option>
         ))}
       </select>
-    </> 
+    </div> 
   )
 }

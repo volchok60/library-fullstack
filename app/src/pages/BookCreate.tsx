@@ -82,15 +82,19 @@ export default function BookCreate() {
 
   return (
     <div>
-      <h1 className='text-center m-2'>New Book</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-3">
-          <label className='sm:text-end'>Title:</label>
-          <input type="text" name="title" required value={formData.title}
-            onChange={e => setFormData({...formData, title: e.target.value})} />
-
-          <label className='sm:text-end'>Author:</label>
-          <select name='author_id' value={formData.authorId} required onChange={e => setFormData({...formData, authorId: e.target.value})}>
+      <h1 className='text-center m-2 font-bold p-4 text-lg'>New Book</h1>
+      <form onSubmit={handleSubmit} className='p-4'>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Title</label>
+          <input type="text" name="title" required value={formData.title} 
+            onChange={e => setFormData({...formData, title: e.target.value})} 
+            className='self-start mb-2' maxLength={255}/>
+        </div>  
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Author</label>
+          <select name='author_id' value={formData.authorId} required 
+            onChange={e => setFormData({...formData, authorId: e.target.value})}
+            className='self-start mb-2 bg-white'>
             <option>----- select -----</option>
             {authors && authors.map((author: AuthorType) => (
               <option key={author.id} value={author.id}>
@@ -98,9 +102,12 @@ export default function BookCreate() {
               </option>
             ))}
           </select>
-
-          <label className='sm:text-end'>Genre:</label>
-          <select name='genre_id' value={formData.genreId} required onChange={e => setFormData({...formData,  genreId: e.target.value})}>
+        </div>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Genre</label>
+          <select name='genre_id' value={formData.genreId} required 
+            onChange={e => setFormData({...formData,  genreId: e.target.value})}
+            className='self-start mb-2 bg-white'>
             <option>----- select -----</option>
             {genres && genres.map((genre: GenreType) => (
               <option key={genre.id} value={genre.id}>
@@ -108,29 +115,34 @@ export default function BookCreate() {
               </option>
             ))}
           </select>
-
-          <label className='sm:text-end'>Imprint:</label>
-          <input type="text" name="imprint" required value={formData.imprint}
-            onChange={e => setFormData({...formData, imprint: e.target.value})} />
-
-          <BookStatus />
-
-          <label className='sm:text-end'>ISBN:</label>
-          <input type="text" name="isbn" required value={formData.isbn}
-            onChange={e => setFormData({...formData, isbn: e.target.value})} />
-          
-          <label className='sm:text-end'>Due Date:</label>
-          <input type="date" name="due_date" value={formData.dueDate}
-            onChange={e => setFormData({...formData, dueDate: e.target.value})} />
-
-          <label className='sm:text-end'>Summary:</label>
-          <textarea name="summary" rows={10} cols={50} required value={formData.summary}
-            onChange={e => setFormData({...formData, summary: e.target.value})} />
         </div>
-        <div className='text-center'>
-          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 m-2 px-2'>
-            Create
-          </button>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Imprint</label>
+          <input type="text" name="imprint" required value={formData.imprint}
+            onChange={e => setFormData({...formData, imprint: e.target.value})} 
+            className='self-start mb-2' maxLength={255} />
+        </div>
+        <BookStatus />
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>ISBN</label>
+          <input type="text" name="isbn" required value={formData.isbn}
+            onChange={e => setFormData({...formData, isbn: e.target.value})} 
+            className='self-start mb-2' maxLength={13}/>
+        </div>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Due Date</label>
+          <input type="date" name="due_date" value={formData.dueDate}
+            onChange={e => setFormData({...formData, dueDate: e.target.value})} 
+            className='self-start mb-2'/>
+        </div>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>Summary</label>
+          <textarea name="summary" rows={10} cols={50} required value={formData.summary}
+            onChange={e => setFormData({...formData, summary: e.target.value})} 
+            className='self-start mb-2 resize-none' maxLength={2000}/>
+        </div>
+        <div className='text-center m-2'>
+          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 px-4 py-2'>Create</button>
         </div>
       </form>
     </div>
