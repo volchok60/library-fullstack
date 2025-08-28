@@ -33,9 +33,7 @@ export default function GenreCreate() {
           />
         </div>
         <div className='text-center m-2'>
-          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 px-4 py-2'>
-            Create
-          </button>
+          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 px-4 py-2'>Create</button>
         </div>
       </form>
     </div>
