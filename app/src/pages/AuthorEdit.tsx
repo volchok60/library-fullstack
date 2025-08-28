@@ -57,53 +57,55 @@ export default function AuthorEdit() {
 
   return (
     <div>
-      <h1 className='text-center m-2'>Update Author</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2 gap-3">
-          <label className='sm:text-end'>First Name:</label>
+      <h1 className='text-center m-2 font-bold p-4 text-lg'>Update Author</h1>
+      <form onSubmit={handleSubmit} className='p-4'>
+        <div className='flex flex-col mb-2'>
+          <label className='self-start font-semibold mb-1'>First Name</label>
           <input 
-            type="text" 
-            required 
+            type="text" required 
             value={formData.firstName}
             onChange={e => setFormData({...formData, firstName: e.target.value})}
+            className='self-start mb-2' maxLength={255}
           />
-          
-          <label className='sm:text-end'>Family Name:</label>
+        </div>
+        <div className='flex flex-col mb-2'>          
+          <label className='self-start font-semibold mb-1'>Family Name</label>
           <input 
-            type="text" 
-            required 
+            type="text" required 
             value={formData.familyName}
             onChange={e => setFormData({...formData, familyName: e.target.value})}
+            className='self-start mb-2' maxLength={255}
           />
-          
-          <label className='sm:text-end'>Birth Date:</label>
+        </div>
+        <div className='flex flex-col mb-2'>          
+          <label className='self-start font-semibold mb-1'>Birth Date</label>
           <input 
-            type="date" 
-            required 
+            type="date" required 
             value={formData.birthDate}
             onChange={e => setFormData({...formData, birthDate: e.target.value})}
+            className='self-start mb-2'
           />
-          
-          <label className='sm:text-end'>Death Date:</label>
+        </div>
+        <div className='flex flex-col mb-2'>          
+          <label className='self-start font-semibold mb-1'>Death Date</label>
           <input 
             type="date" 
             value={formData.deathDate}
             onChange={e => setFormData({...formData, deathDate: e.target.value})}
-          />
-          
-          <label className='sm:text-end'>Life Span:</label>
-          <textarea 
-            rows={20} 
-            cols={50} 
-            required 
-            value={formData.lifeSpan}
-            onChange={e => setFormData({...formData, lifeSpan: e.target.value})}
+            className='self-start mb-2'
           />
         </div>
-        <div className='text-center'>
-          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 m-2 px-2'>
-            Update
-          </button>
+        <div className='flex flex-col mb-2'>          
+          <label className='self-start font-semibold mb-1'>Life Span</label>
+          <textarea 
+            rows={20} cols={50} required 
+            value={formData.lifeSpan}
+            onChange={e => setFormData({...formData, lifeSpan: e.target.value})}
+            className='self-start mb-2 resize-none' maxLength={1000}
+          />
+        </div>
+        <div className='text-center m-2'>
+          <button type="submit" className='rounded-md bg-cyan-500 text-white hover:bg-blue-500 px-4 py-2'>Update</button>
         </div>
       </form>
     </div>
