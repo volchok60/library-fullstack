@@ -98,7 +98,7 @@ export default function AuthorEdit() {
         <div className='flex flex-col mb-2'>          
           <label className='self-start font-semibold mb-1'>Life Span</label>
           <textarea 
-            rows={20} cols={50} required 
+            rows={10} cols={50} required 
             value={formData.lifeSpan}
             onChange={e => setFormData({...formData, lifeSpan: e.target.value})}
             className='self-start mb-2 resize-none' maxLength={1000}

@@ -24,7 +24,7 @@ export default function GenreCreate() {
       <h1 className='text-center m-2 font-bold p-4 text-lg'>New Genre</h1>
       <form onSubmit={handleSubmit} className='p-4'>
         <div className='flex flex-col mb-2'>
-          <label className='self-start font-semibold mb-1'>Name:</label>
+          <label className='self-start font-semibold mb-1'>Name</label>
           <input 
             type='text' required 
             value={title}
