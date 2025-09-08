@@ -1,6 +1,6 @@
 # Library
 
-React SPA app with Supabase integration 
+React SPA
 
 ## Scaffolding
 
